@@ -5,6 +5,9 @@
 #include <QResizeEvent>
 #include <QMouseEvent>
 #include <QShowEvent>
+#include <QLayout>
+#include <QPushButton>
+#include <QDebug>
 
 #include <TCanvas.h>
 #include <TVirtualX.h>
@@ -15,10 +18,8 @@
 #include <TH1.h>
 #include <TFrame.h>
 #include <TTimer.h>
-#include <QLayout>
-#include <QPushButton>
-#include <QDebug>
-
+#include <TLegend.h>
+#include <THStack.h>
 
 QRootCanvas::QRootCanvas(QWidget *parent) :
     QWidget(parent, 0), canvas(0)
@@ -37,10 +38,46 @@ TCanvas* QRootCanvas::getCanvas()
     return canvas;
 }
 
-void QRootCanvas::draw(TH1& plot)
+void QRootCanvas::draw(TH1* plot)
 {
     canvas->cd();
-    plot.Draw();
+    plot->Draw();
+}
+
+void QRootCanvas::clear()
+{
+    canvas->cd();
+    canvas->Clear();
+}
+
+void QRootCanvas::superimpose(std::vector<TH1*> plots)
+{
+    canvas->cd();
+    canvas->Clear();
+
+    std::vector<Int_t> basic_colors = { kBlue, kGreen, kCyan, kMagenta, kRed };
+    std::vector<Int_t> colors;
+    for(auto c : basic_colors) colors.push_back(c);
+    for(auto c : basic_colors) colors.push_back(c+2);
+    for(auto c : basic_colors) colors.push_back(c-7);
+    for(auto c : basic_colors) colors.push_back(c-4);
+    for(auto c : basic_colors) colors.push_back(c-9);
+    auto legend = new TLegend(0.65,0.8,0.85,0.9);
+
+    THStack* hs = new THStack("","Superimposed plots");
+
+    canvas->cd();
+    int idx = 0;
+    for(auto& elem : plots) {
+        elem->SetLineColor(colors[idx]);
+        legend->AddEntry(elem, elem->GetTitle());
+        hs->Add(elem);
+        idx++;
+    }
+
+    hs->Draw("nostack");
+    legend->Draw();
+    canvas->Update();
 }
 
 void QRootCanvas::mouseMoveEvent(QMouseEvent *e)

@@ -26,19 +26,22 @@ CONFIG += console
 
 SOURCES += main.cpp\
     qrootcanvas.cpp \
-    previewqrootcanvas.cpp \
-    qtbrowser.cpp
+    qtbrowser.cpp \
+    superimposeplugin.cpp
 
 HEADERS  += \
     tobjectcontainer.h \
     leafsortfilterproxymodel.h \
     qrootcanvas.h \
     previewqrootcanvas.h \
-    qtbrowser.h
+    qtbrowser.h \
+    iplugin.h \
+    superimposeplugin.h
 
 FORMS    += \
     previewqrootcanvas.ui \
-    qtbrowser.ui
+    qtbrowser.ui \
+    superimposeplugin.ui
 
 LIBS     += -L/usr/local/lib -lGui -lCore -lImt -lRIO -lNet \
             -lHist -lGraf -lGraf3d -lGpad -lTree -lTreePlayer \

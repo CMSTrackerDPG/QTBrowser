@@ -35,6 +35,9 @@ QTBrowser::QTBrowser(QWidget *parent) :
             this,         SLOT(customMenuRequested(QPoint)));
 
     add_root_file_as_tree("/home/fil/projects/dqmPlotter/f1.root");
+
+    connect(this,        SIGNAL(sendSignal(TObject*)),
+            ui->widget, SLOT(receiveTObj(TObject*)));
 }
 
 QTBrowser::~QTBrowser()
@@ -89,10 +92,9 @@ void QTBrowser::on_treeView_doubleClicked(const QModelIndex &index)
     TObjectContainer* o = index.data(Qt::UserRole + 1).value<TObjectContainer*>();
     if(o) {
         qDebug() << o->getName();
-        o->getObject()->Print();
+        sendSignal(o->getObject());
     }
 }
-
 
 // removes the idx item and its children.
 void QTBrowser::remove_tree_item(QModelIndex idx) {

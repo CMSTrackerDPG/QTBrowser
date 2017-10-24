@@ -20,7 +20,9 @@ public:
     QRootCanvas( QWidget *parent = 0);
     virtual ~QRootCanvas() {}
     TCanvas* getCanvas(); // TODO: make private
-    void draw(TH1& plot);
+    void draw(TH1* plot);
+    void clear();
+    void superimpose(std::vector<TH1*> plots);
 
 public slots:
     void handle_root_events();

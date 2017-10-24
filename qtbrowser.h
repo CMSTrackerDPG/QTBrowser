@@ -9,6 +9,7 @@
 #include <TApplication.h>
 
 #include "leafsortfilterproxymodel.h"
+#include "iplugin.h"
 
 namespace Ui {
 class QTBrowser;
@@ -21,6 +22,9 @@ class QTBrowser : public QMainWindow
 public:
     explicit QTBrowser(QWidget *parent = 0);
     ~QTBrowser();
+
+signals:
+    void sendSignal(TObject* obj);
 
 private slots:
     void on_applyFilterButton_clicked();

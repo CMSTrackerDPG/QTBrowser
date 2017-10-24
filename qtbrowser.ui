@@ -6,38 +6,50 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>383</width>
-    <height>707</height>
+    <width>658</width>
+    <height>790</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>QTBrowser</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Filter:</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="filterLineEdit"/>
-      </item>
-      <item>
-       <widget class="QPushButton" name="applyFilterButton">
-        <property name="text">
-         <string>Apply</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QTreeView" name="treeView"/>
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <widget class="QWidget" name="layoutWidget">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Filter:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="filterLineEdit"/>
+          </item>
+          <item>
+           <widget class="QPushButton" name="applyFilterButton">
+            <property name="text">
+             <string>Apply</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QTreeView" name="treeView"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="SuperimposePlugin" name="widget" native="true"/>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -46,7 +58,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>383</width>
+     <width>658</width>
      <height>28</height>
     </rect>
    </property>
@@ -69,11 +81,19 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionOpen_File">
    <property name="text">
-    <string>Open File</string>
+    <string>&amp;Open File</string>
    </property>
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>SuperimposePlugin</class>
+   <extends>QWidget</extends>
+   <header>superimposeplugin.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
