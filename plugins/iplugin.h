@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QDebug>
 
+#include "tobjectcontainer.h"
+
 #include <TH1.h>
 
 namespace Ui {
@@ -16,7 +18,7 @@ public:
     virtual ~IPlugin() {}
 
 public slots:
-    virtual void receiveTObj(TObject* obj) = 0;
+    virtual void receiveTObj(TObjectContainer& container) = 0;
 };
 
 #endif // IPLUGIN_H

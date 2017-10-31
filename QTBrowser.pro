@@ -22,27 +22,42 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-CONFIG += console
+CONFIG += console static
 
 SOURCES += main.cpp\
     qrootcanvas.cpp \
     qtbrowser.cpp \
-    superimposeplugin.cpp
+    settings/settingsdialog.cpp \
+    settings/settingsmanager.cpp \
+    dqmfiledownloader/dqmfiledownloader.cpp \
+    dqmfiledownloader/remotefilesmodel.cpp \
+    plugins/superimposeplugin.cpp \
+    plugins/concatinateplugin.cpp
 
 HEADERS  += \
+    qtbrowser.h \
+    qrootcanvas.h \
     tobjectcontainer.h \
     leafsortfilterproxymodel.h \
-    qrootcanvas.h \
     previewqrootcanvas.h \
-    qtbrowser.h \
-    iplugin.h \
-    superimposeplugin.h
+    settings/settingsdialog.h \
+    settings/settingsmanager.h \
+    dqmfiledownloader/dqmfiledownloader.h \
+    dqmfiledownloader/filecontainer.h \
+    dqmfiledownloader/remotefilesmodel.h \
+    plugins/iplugin.h \
+    plugins/superimposeplugin.h \
+    plugins/concatinateplugin.h
 
 FORMS    += \
     previewqrootcanvas.ui \
     qtbrowser.ui \
-    superimposeplugin.ui
+    settings/settingsdialog.ui \
+    dqmfiledownloader/dqmfiledownloader.ui \
+    plugins/superimposeplugin.ui \
+    plugins/concatinateplugin.ui
 
+# FIXME: Link statically
 LIBS     += -L/usr/local/lib -lGui -lCore -lImt -lRIO -lNet \
             -lHist -lGraf -lGraf3d -lGpad -lTree -lTreePlayer \
             -lRint -lPostscript -lMatrix -lPhysics \

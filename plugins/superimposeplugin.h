@@ -20,17 +20,21 @@ public:
     ~SuperimposePlugin();
 
 public slots:
-    void receiveTObj(TObject* obj) override;
+    void receiveTObj(TObjectContainer& container) override;
 
 private slots:
+    void customMenuRequested(QPoint pos);
     void on_listWidget_itemChanged(QListWidgetItem *item);
-
     void on_pushButton_clicked();
+    void on_pushButton_2_clicked();
 
 private:
-    void superimpose_checked();
+    void superimposeCheckedItems();
+    void removeSelectedFromList();
 
     Ui::SuperimposePlugin *ui;
+
+    QString plot_title = "";
 };
 
 

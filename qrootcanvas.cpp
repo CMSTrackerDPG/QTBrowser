@@ -50,7 +50,7 @@ void QRootCanvas::clear()
     canvas->Clear();
 }
 
-void QRootCanvas::superimpose(std::vector<TH1*> plots)
+void QRootCanvas::superimpose(std::vector<TH1*> plots, std::string title)
 {
     canvas->cd();
     canvas->Clear();
@@ -64,7 +64,7 @@ void QRootCanvas::superimpose(std::vector<TH1*> plots)
     for(auto c : basic_colors) colors.push_back(c-9);
     auto legend = new TLegend(0.65,0.8,0.85,0.9);
 
-    THStack* hs = new THStack("","Superimposed plots");
+    THStack* hs = new THStack("", title.c_str());
 
     canvas->cd();
     int idx = 0;
@@ -78,6 +78,38 @@ void QRootCanvas::superimpose(std::vector<TH1*> plots)
     hs->Draw("nostack");
     legend->Draw();
     canvas->Update();
+}
+
+void QRootCanvas::concatinatePlots(std::vector<TH1*> plots, std::string title)
+{
+    int total_bins = 0;
+    int total_range = 0;
+    for(auto& plot : plots) {
+        total_range += int(plot->GetXaxis()->GetXmax()) * (plot->FindLastBinAbove(0.1) / float(plot->GetNbinsX() - 2));
+        total_bins  += plot->FindLastBinAbove(0.);
+    }
+
+    // FIXME: producing memory leak here
+    auto* merged = new TH1F("",title.c_str(), total_bins, 0, total_range);
+
+    int offset = 0;
+    for(auto& plot : plots) {
+        int last_idx = plot->FindLastBinAbove(0.);
+
+        for(int bin = 0; bin<last_idx; bin++) {
+            merged->SetBinContent(bin+offset, plot->GetBinContent(bin));
+        }
+
+        offset += last_idx;
+    }
+    canvas->cd();
+    merged->Draw();
+}
+
+void QRootCanvas::saveAs(std::string filename)
+{
+    canvas->cd();
+    canvas->SaveAs(filename.c_str());
 }
 
 void QRootCanvas::mouseMoveEvent(QMouseEvent *e)

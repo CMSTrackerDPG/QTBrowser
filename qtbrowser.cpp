@@ -12,6 +12,11 @@
 
 #include "tobjectcontainer.h"
 #include "previewqrootcanvas.h"
+#include "settings/settingsmanager.h"
+
+#include "settings/settingsdialog.h"
+#include "dqmfiledownloader/dqmfiledownloader.h"
+#include "plugins/superimposeplugin.h"
 
 QTBrowser::QTBrowser(QWidget *parent) :
     QMainWindow(parent),
@@ -20,6 +25,7 @@ QTBrowser::QTBrowser(QWidget *parent) :
     rootapp = new TApplication("ROOT Application", 0, 0);
 
     ui->setupUi(this);
+
     ui->treeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->treeView->header()->close();
     ui->treeView->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -36,8 +42,11 @@ QTBrowser::QTBrowser(QWidget *parent) :
 
     add_root_file_as_tree("/home/fil/projects/dqmPlotter/f1.root");
 
-    connect(this,        SIGNAL(sendSignal(TObject*)),
-            ui->widget, SLOT(receiveTObj(TObject*)));
+    //TODO: Figure out how to dynamically change the Plugins
+
+    // TODO: sendSignal needs a better name
+    connect(this,       SIGNAL(sendSignal(TObjectContainer&)),
+            ui->widget, SLOT(receiveTObj(TObjectContainer&)));
 }
 
 QTBrowser::~QTBrowser()
@@ -45,6 +54,25 @@ QTBrowser::~QTBrowser()
     delete ui;
 }
 
+// removes the idx item and its children.
+void QTBrowser::remove_tree_item(QModelIndex idx) {
+    proxy_model->removeColumn(0, idx);
+    proxy_model->removeRow(idx.row(), idx.parent());
+}
+
+void QTBrowser::previewItem(QModelIndex idx)
+{
+    TObjectContainer* o = idx.data(Qt::UserRole + 1).value<TObjectContainer*>();
+    if(o && o->getObject()) {
+        qDebug() << o->getTitle();
+        PreviewQRootCanvas* preview = new PreviewQRootCanvas;
+        preview->setAttribute(Qt::WA_DeleteOnClose);
+        preview->show();
+        preview->preview((TH1*)o->getObject());
+    }
+}
+
+//___________________________ EVENT HANDLERS ___________________________
 void QTBrowser::customMenuRequested(QPoint pos){
     QModelIndex index= ui->treeView->indexAt(pos);
 
@@ -57,12 +85,25 @@ void QTBrowser::customMenuRequested(QPoint pos){
 
     menu->popup(ui->treeView->viewport()->mapToGlobal(pos));
 
-    connect(preview_item_action, &QAction::triggered, [this, index]() { preview_item(index); });
+    connect(preview_item_action, &QAction::triggered, [this, index]() { previewItem(index); });
     connect(remove_item_action,  &QAction::triggered, [this, index]() { remove_tree_item(index); });
 }
 
+void QTBrowser::on_actionSettings_triggered()
+{
+    SettingsDialog* settings_dialog = new SettingsDialog;
+    settings_dialog->setAttribute(Qt::WA_DeleteOnClose);
+    settings_dialog->show();
+}
 
-void QTBrowser::on_applyFilterButton_clicked()
+void QTBrowser::on_actionDownload_Remote_Files_triggered()
+{
+    DQMFileDownloader* file_downloader = new DQMFileDownloader(this);
+    file_downloader->setAttribute(Qt::WA_DeleteOnClose);
+    file_downloader->show();
+}
+
+void QTBrowser::on_filterLineEdit_returnPressed()
 {
     QString filter = ui->filterLineEdit->text();
     proxy_model->setFilterRegExp(filter);
@@ -77,13 +118,16 @@ void QTBrowser::on_applyFilterButton_clicked()
     }
 }
 
+//TODO: Generally not happy with how the filtering is done w.r.t. to
+//      already loaded files.
 void QTBrowser::on_actionOpen_File_triggered()
 {
-    qDebug() << "Open file pressed";
-    QString file_name = QFileDialog::getOpenFileName(this, tr("Select"), "/home/", tr("ROOT files (*.root)"));
+    QString dl_path = SettingsManager::getInstance().getSetting(SETTING::DOWNLOAD_PATH);
+    QString file_name = QFileDialog::getOpenFileName(this, tr("Select"), dl_path, tr("ROOT files (*.root)"));
 
     if(file_name.length()) {
         add_root_file_as_tree(file_name);
+        on_filterLineEdit_returnPressed();
     }
 }
 
@@ -91,26 +135,8 @@ void QTBrowser::on_treeView_doubleClicked(const QModelIndex &index)
 {
     TObjectContainer* o = index.data(Qt::UserRole + 1).value<TObjectContainer*>();
     if(o) {
-        qDebug() << o->getName();
-        sendSignal(o->getObject());
-    }
-}
-
-// removes the idx item and its children.
-void QTBrowser::remove_tree_item(QModelIndex idx) {
-    proxy_model->removeColumn(0, idx);
-    proxy_model->removeRow(idx.row(), idx.parent());
-}
-
-void QTBrowser::preview_item(QModelIndex idx)
-{
-    TObjectContainer* o = idx.data(Qt::UserRole + 1).value<TObjectContainer*>();
-    if(o && o->getObject()) {
-        qDebug() << o->getName();
-        PreviewQRootCanvas* preview = new PreviewQRootCanvas;
-        preview->setAttribute(Qt::WA_DeleteOnClose);
-        preview->show();
-        preview->preview((TH1*)o->getObject());
+        qDebug() << o->getTitle();
+        sendSignal(*o);
     }
 }
 
@@ -118,15 +144,21 @@ void QTBrowser::preview_item(QModelIndex idx)
 void QTBrowser::add_root_file_as_tree(QString file_path){
     TFile* f = TFile::Open(file_path.toStdString().c_str());
 
-    QStandardItem *parentItem = new QStandardItem(file_path);
-    model->appendRow(parentItem);
+    QStandardItem* parent_item = new QStandardItem(file_path);
 
     for (auto i : *(f->GetListOfKeys())) {
-        visit(((TKey*)i), "", parentItem);
+        // TODO: file_path is just being passed in visit
+        //       so that a tooltip for the current file showing
+        //       sohwing the filename+currentpath in the file
+        //       can be displayed in the plugins
+        //       This can probably be done more elegantly.
+        visit(((TKey*)i), "", parent_item, file_path);
     }
+
+    model->appendRow(parent_item);
 }
 
-void QTBrowser::visit(TKey* td, QString current_path, QStandardItem* parent) {
+void QTBrowser::visit(TKey* td, QString current_path, QStandardItem* parent, QString file_path) {
     TIter list(((TDirectory*)(td->ReadObj()))->GetListOfKeys());
     TKey *key;
     while ((key = (TKey*)list())) {
@@ -134,7 +166,7 @@ void QTBrowser::visit(TKey* td, QString current_path, QStandardItem* parent) {
 
         TObject* o = key->ReadObj();
 
-        TObjectContainer *object = new TObjectContainer(o);
+        TObjectContainer *object = new TObjectContainer(o, file_path, current_path);
         QStandardItem *item = new QStandardItem(o->GetTitle());
 
         item->setData(QVariant::fromValue(object));  // this defaults to Qt::UserRole + 1
@@ -155,7 +187,7 @@ void QTBrowser::visit(TKey* td, QString current_path, QStandardItem* parent) {
         }
 
         if(cl1->InheritsFrom("TDirectory")) {
-            visit(key, current_path + "/" + QString(key->GetTitle()), item);
+            visit(key, current_path + "/" + QString(key->GetTitle()), item, file_path);
         }
     }
 }

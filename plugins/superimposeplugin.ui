@@ -6,20 +6,61 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>359</width>
-    <height>523</height>
+    <width>493</width>
+    <height>691</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>200</width>
-    <height>200</height>
+    <width>0</width>
+    <height>0</height>
    </size>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="toolTip">
+        <string>This is wher ethe superimpose comment goes</string>
+       </property>
+       <property name="text">
+        <string>Superimpose Plugin</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string>Set Title </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_2">
+       <property name="text">
+        <string>Save as ...</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
    <item>
     <widget class="QSplitter" name="splitter">
      <property name="orientation">
@@ -28,8 +69,8 @@
      <widget class="QRootCanvas" name="widget" native="true">
       <property name="minimumSize">
        <size>
-        <width>150</width>
-        <height>200</height>
+        <width>0</width>
+        <height>300</height>
        </size>
       </property>
      </widget>
@@ -37,7 +78,7 @@
       <property name="maximumSize">
        <size>
         <width>16777215</width>
-        <height>200</height>
+        <height>16777215</height>
        </size>
       </property>
       <property name="baseSize">
@@ -47,13 +88,6 @@
        </size>
       </property>
      </widget>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="pushButton">
-     <property name="text">
-      <string>Remove Selected Items</string>
-     </property>
     </widget>
    </item>
   </layout>

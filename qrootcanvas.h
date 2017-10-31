@@ -22,7 +22,10 @@ public:
     TCanvas* getCanvas(); // TODO: make private
     void draw(TH1* plot);
     void clear();
-    void superimpose(std::vector<TH1*> plots);
+    void saveAs(std::string filename);
+
+    void superimpose(std::vector<TH1*> plots, std::string title = "");
+    void concatinatePlots(std::vector<TH1*> plots, std::string title = "");
 
 public slots:
     void handle_root_events();

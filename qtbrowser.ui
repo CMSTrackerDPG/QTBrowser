@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>658</width>
-    <height>790</height>
+    <width>879</width>
+    <height>667</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,8 +17,26 @@
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
      <widget class="QSplitter" name="splitter">
+      <property name="font">
+       <font>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
+      <property name="lineWidth">
+       <number>1</number>
+      </property>
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="opaqueResize">
+       <bool>true</bool>
+      </property>
+      <property name="handleWidth">
+       <number>2</number>
       </property>
       <widget class="QWidget" name="layoutWidget">
        <layout class="QVBoxLayout" name="verticalLayout">
@@ -35,11 +53,17 @@
            <widget class="QLineEdit" name="filterLineEdit"/>
           </item>
           <item>
-           <widget class="QPushButton" name="applyFilterButton">
-            <property name="text">
-             <string>Apply</string>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
             </property>
-           </widget>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </item>
@@ -48,7 +72,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="SuperimposePlugin" name="widget" native="true"/>
+      <widget class="ConcatinatePlugin" name="widget" native="true"/>
      </widget>
     </item>
    </layout>
@@ -58,7 +82,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>658</width>
+     <width>879</width>
      <height>28</height>
     </rect>
    </property>
@@ -67,8 +91,23 @@
      <string>Fi&amp;le</string>
     </property>
     <addaction name="actionOpen_File"/>
+    <addaction name="actionDownload_Remote_Files"/>
+   </widget>
+   <widget class="QMenu" name="menuRemote_Files">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="actionSettings"/>
+   </widget>
+   <widget class="QMenu" name="menuPlugins">
+    <property name="title">
+     <string>Pl&amp;ugins</string>
+    </property>
+    <addaction name="actionAbout_Plugins"/>
    </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuRemote_Files"/>
+   <addaction name="menuPlugins"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -84,13 +123,28 @@
     <string>&amp;Open File</string>
    </property>
   </action>
+  <action name="actionSettings">
+   <property name="text">
+    <string>&amp;Settings</string>
+   </property>
+  </action>
+  <action name="actionDownload_Remote_Files">
+   <property name="text">
+    <string>&amp;Download Remote Files</string>
+   </property>
+  </action>
+  <action name="actionAbout_Plugins">
+   <property name="text">
+    <string>&amp;About Plugins</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>SuperimposePlugin</class>
+   <class>ConcatinatePlugin</class>
    <extends>QWidget</extends>
-   <header>superimposeplugin.h</header>
+   <header>plugins/concatinateplugin.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
