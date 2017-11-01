@@ -28,6 +28,8 @@ private slots:
     void on_pushButton_clicked();
     void on_pushButton_2_clicked();
 
+    void on_checkBox_clicked();
+
 private:
     void superimposeCheckedItems();
     void removeSelectedFromList();
@@ -35,6 +37,7 @@ private:
     Ui::SuperimposePlugin *ui;
 
     QString plot_title = "";
+    bool is_multiaxis_enable = false;
 };
 
 

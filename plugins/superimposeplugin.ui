@@ -46,6 +46,13 @@
       </spacer>
      </item>
      <item>
+      <widget class="QCheckBox" name="checkBox">
+       <property name="text">
+        <string>Multiaxis</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="pushButton">
        <property name="text">
         <string>Set Title </string>

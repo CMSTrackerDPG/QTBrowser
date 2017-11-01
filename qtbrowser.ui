@@ -72,7 +72,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="ConcatinatePlugin" name="widget" native="true"/>
+      <widget class="SuperimposePlugin" name="widget" native="true"/>
      </widget>
     </item>
    </layout>
@@ -142,9 +142,9 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>ConcatinatePlugin</class>
+   <class>SuperimposePlugin</class>
    <extends>QWidget</extends>
-   <header>plugins/concatinateplugin.h</header>
+   <header>superimposeplugin.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -20,6 +20,7 @@
 #include <TTimer.h>
 #include <TLegend.h>
 #include <THStack.h>
+#include <TGaxis.h>
 
 QRootCanvas::QRootCanvas(QWidget *parent) :
     QWidget(parent, 0), canvas(0)
@@ -55,7 +56,7 @@ void QRootCanvas::superimpose(std::vector<TH1*> plots, std::string title)
     canvas->cd();
     canvas->Clear();
 
-    std::vector<Int_t> basic_colors = { kBlue, kGreen, kCyan, kMagenta, kRed };
+    std::vector<Int_t> basic_colors = { kBlue+2, kRed, kCyan, kMagenta, kGreen};
     std::vector<Int_t> colors;
     for(auto c : basic_colors) colors.push_back(c);
     for(auto c : basic_colors) colors.push_back(c+2);
@@ -80,6 +81,99 @@ void QRootCanvas::superimpose(std::vector<TH1*> plots, std::string title)
     canvas->Update();
 }
 
+void QRootCanvas::superimpose_multiaxis(std::vector<TH1*> plots, std::string title)
+{
+    // TODO: works alright but its nasty as fuck; relies on non obvious ordering
+    //   -IDEA: instead of plotting the largest Xaxis plot seperatly, swap in in the
+    //          vector to the first place (plots[0]) and then loop over all the plots
+    //          and just have a special case there.
+
+    std::vector<Int_t> basic_colors = { kRed, kCyan, kMagenta, kGreen, kBlue };
+    std::vector<Int_t> colors;
+    for(auto c : basic_colors) colors.push_back(c);
+    for(auto c : basic_colors) colors.push_back(c+2);
+    for(auto c : basic_colors) colors.push_back(c-7);
+    for(auto c : basic_colors) colors.push_back(c-4);
+    for(auto c : basic_colors) colors.push_back(c-9);
+    auto legend = new TLegend(0.65,0.8,0.85,0.9);
+
+
+    // How all of this works:
+    // We find the plot that has the largest X value on the x axis, so that all the
+    // other plots essentially fit into that one. that plot its plots[largest_plot_idx]
+    int maxx = 0, largest_plot_idx = 0;
+
+    for(int i=0; i<plots.size(); i++) {
+        if(plots[i]->GetXaxis()->GetXmax() > maxx) {
+            maxx = plots[i]->GetXaxis()->GetXmax();
+            largest_plot_idx = i;
+        }
+    }
+    plots[largest_plot_idx]->SetStats(false);
+    legend->AddEntry(plots[largest_plot_idx], plots[largest_plot_idx]->GetTitle());
+
+    // Draw the Plot, disable all the axis labels
+    // Then we draw that plot before anything else, and remove it from
+    // @arg plots, so that we can now iterate over @arg plots
+    // and superimpose on top of the largest one
+    plots[largest_plot_idx]->SetTitle(title.c_str());
+    plots[largest_plot_idx]->GetXaxis()->SetTitle("");
+    plots[largest_plot_idx]->GetYaxis()->SetTitle("");
+    plots[largest_plot_idx]->Draw();
+    legend->Draw();
+
+    canvas->Update();
+    plots.erase(plots.begin() + largest_plot_idx);
+
+    float scale;
+    int offset=0;
+    int ctr=0;
+    for(auto& plot : plots) {
+        auto curr_color = colors[ctr];
+
+        plot->SetStats(false);
+        scale = gPad->GetUymax()/plot->GetMaximum();
+        plot->SetLineColor(curr_color);
+
+
+        // YAxis stuff
+        //offset the axis after the second plot by 5% of the maximum of Yaxis
+        offset = (float(gPad->GetUxmax())*0.05)*ctr;
+
+        TGaxis* Yaxis = new TGaxis(gPad->GetUxmax()-offset, gPad->GetUymin(),
+                                   gPad->GetUxmax()-offset, gPad->GetUymax(),
+                                   0, plot->GetMaximum(),
+                                   505,"+L");
+
+        Yaxis->SetLineColor(curr_color);
+        Yaxis->SetLabelColor(curr_color);
+        Yaxis->Draw();
+
+        // XAxis stuff
+        offset = (float(gPad->GetUymax())*0.05)*ctr;
+        TGaxis* Xaxis = new TGaxis(gPad->GetUxmin(), gPad->GetUymax() - offset,
+                                   gPad->GetUxmax(), gPad->GetUymax() - offset,
+                                   plot->GetXaxis()->GetXmin(), plot->GetXaxis()->GetXmax(),
+                                   505,"");
+
+        Xaxis->SetLineColor(curr_color);
+        Xaxis->SetLabelColor(curr_color);
+        Xaxis->Draw();
+
+        plot->Scale(scale); // Y rescale
+        plot->SetBins(plot->GetNbinsX(), 0, maxx); // X rescale
+
+        // Histogram stuff
+        plot->Draw("][ same hist");
+
+        // Legend stuff
+        legend->AddEntry(plot, plot->GetTitle());
+        legend->Draw();
+
+        ctr++;
+    }
+}
+
 void QRootCanvas::concatinatePlots(std::vector<TH1*> plots, std::string title)
 {
     int total_bins = 0;
@@ -99,7 +193,6 @@ void QRootCanvas::concatinatePlots(std::vector<TH1*> plots, std::string title)
         for(int bin = 0; bin<last_idx; bin++) {
             merged->SetBinContent(bin+offset, plot->GetBinContent(bin));
         }
-
         offset += last_idx;
     }
     canvas->cd();

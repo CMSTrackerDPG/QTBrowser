@@ -24,7 +24,10 @@ public:
     void clear();
     void saveAs(std::string filename);
 
+    //TODO: maybe make superimpse/_mutliaxis into one function that has a bool multiaxis param
     void superimpose(std::vector<TH1*> plots, std::string title = "");
+    void superimpose_multiaxis(std::vector<TH1*> plots, std::string title = "");
+
     void concatinatePlots(std::vector<TH1*> plots, std::string title = "");
 
 public slots:
