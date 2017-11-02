@@ -13,7 +13,7 @@
 #include "settings/settingsmanager.h"
 
 DQMFileDownloader::DQMFileDownloader(QWidget *parent) :
-    QMainWindow(parent),
+    QWidget(parent),
     ui(new Ui::DQMFileDownloader)
 {
     ui->setupUi(this);
@@ -24,7 +24,6 @@ DQMFileDownloader::DQMFileDownloader(QWidget *parent) :
 
     ui->listView->setModel(proxy_remote_files_model);
     ui->listView->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    ui->statusBar->showMessage("Ready!");
 }
 
 DQMFileDownloader::~DQMFileDownloader()

@@ -42,8 +42,26 @@ void SuperimposePlugin::receiveTObj(TObjectContainer& container)
         item->setFlags(item->flags() | Qt::ItemIsUserCheckable); // set checkable flag
         item->setCheckState(Qt::Checked); // initialize check state
         ui->listWidget->addItem(item);
+        displayCheckedInPreview();
         superimposeCheckedItems();
     }
+}
+
+void SuperimposePlugin::displayCheckedInPreview()
+{
+    ui->widget->clear();
+
+    std::vector<TH1*> plots;
+    for (int i = 0; i < ui->listWidget->count(); i++) {
+        TObjectContainer* o = ui->listWidget->item(i)->data(Qt::UserRole).value<TObjectContainer*>();
+
+        auto item = ui->listWidget->item(i);
+        if(item->checkState() == Qt::Checked) {
+            plots.push_back((TH1*)o->getObject()->Clone());
+        }
+    }
+
+    ui->widget_2->draw(plots);
 }
 
 void SuperimposePlugin::superimposeCheckedItems()
@@ -78,8 +96,9 @@ void SuperimposePlugin::customMenuRequested(QPoint pos){
 }
 
 
-void SuperimposePlugin::on_listWidget_itemChanged(QListWidgetItem* item)
+void SuperimposePlugin::on_listWidget_itemChanged(QListWidgetItem* /*item*/)
 {
+    displayCheckedInPreview();
     superimposeCheckedItems();
 }
 
@@ -88,6 +107,7 @@ void SuperimposePlugin::removeSelectedFromList()
     for(auto& e : ui->listWidget->selectedItems()) {
         delete e;
     }
+    displayCheckedInPreview();
     superimposeCheckedItems();
 }
 

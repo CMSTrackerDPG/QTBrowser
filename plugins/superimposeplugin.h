@@ -24,7 +24,7 @@ public slots:
 
 private slots:
     void customMenuRequested(QPoint pos);
-    void on_listWidget_itemChanged(QListWidgetItem *item);
+    void on_listWidget_itemChanged(QListWidgetItem* item);
     void on_pushButton_clicked();
     void on_pushButton_2_clicked();
 
@@ -32,6 +32,7 @@ private slots:
 
 private:
     void superimposeCheckedItems();
+    void displayCheckedInPreview();
     void removeSelectedFromList();
 
     Ui::SuperimposePlugin *ui;

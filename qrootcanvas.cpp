@@ -34,15 +34,27 @@ QRootCanvas::QRootCanvas(QWidget *parent) :
     root_timer->start( 20 );
 }
 
-TCanvas* QRootCanvas::getCanvas()
-{
-    return canvas;
-}
-
 void QRootCanvas::draw(TH1* plot)
 {
     canvas->cd();
     plot->Draw();
+}
+
+void QRootCanvas::draw(std::vector<TH1*> plots)
+{
+    canvas->Clear();
+    canvas->Divide(plots.size(), 1);
+    std::vector<TH1*> copies;
+    for(auto& elem : plots){
+        copies.push_back((TH1*)elem->Clone());
+    }
+
+    int i = 1;
+    for(auto& elem : copies) {
+        canvas->cd(i++);
+        elem->Draw();
+    }
+    canvas->Update();
 }
 
 void QRootCanvas::clear()
@@ -56,7 +68,7 @@ void QRootCanvas::superimpose(std::vector<TH1*> plots, std::string title)
     canvas->cd();
     canvas->Clear();
 
-    std::vector<Int_t> basic_colors = { kBlue+2, kRed, kCyan, kMagenta, kGreen};
+    std::vector<Int_t> basic_colors = { kBlue+2, kRed, kCyan+1, kMagenta, kGreen};
     std::vector<Int_t> colors;
     for(auto c : basic_colors) colors.push_back(c);
     for(auto c : basic_colors) colors.push_back(c+2);
@@ -83,12 +95,13 @@ void QRootCanvas::superimpose(std::vector<TH1*> plots, std::string title)
 
 void QRootCanvas::superimpose_multiaxis(std::vector<TH1*> plots, std::string title)
 {
+    canvas->cd();
     // TODO: works alright but its nasty as fuck; relies on non obvious ordering
     //   -IDEA: instead of plotting the largest Xaxis plot seperatly, swap in in the
     //          vector to the first place (plots[0]) and then loop over all the plots
     //          and just have a special case there.
 
-    std::vector<Int_t> basic_colors = { kRed, kCyan, kMagenta, kGreen, kBlue };
+    std::vector<Int_t> basic_colors = { kRed, kCyan+1, kMagenta, kGreen, kBlue };
     std::vector<Int_t> colors;
     for(auto c : basic_colors) colors.push_back(c);
     for(auto c : basic_colors) colors.push_back(c+2);

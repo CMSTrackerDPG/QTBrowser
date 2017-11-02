@@ -10,11 +10,11 @@ namespace Ui {
 class DQMFileDownloader;
 }
 
-class DQMFileDownloader : public QMainWindow
+class DQMFileDownloader : public QWidget
 {
     Q_OBJECT
 public:
-    explicit DQMFileDownloader(QWidget *parent = 0);
+    DQMFileDownloader(QWidget *parent = 0);
     ~DQMFileDownloader();
 
     // this is static so that QtConcurrent accepts it without having to write a wrapper

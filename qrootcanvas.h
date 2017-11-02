@@ -19,8 +19,10 @@ class QRootCanvas : public QWidget
 public:
     QRootCanvas( QWidget *parent = 0);
     virtual ~QRootCanvas() {}
-    TCanvas* getCanvas(); // TODO: make private
+
     void draw(TH1* plot);
+    void draw(std::vector<TH1*> plots);
+
     void clear();
     void saveAs(std::string filename);
 
