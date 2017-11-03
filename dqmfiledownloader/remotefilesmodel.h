@@ -15,10 +15,9 @@ public:
 public:
     int rowCount(const QModelIndex& parent) const override;
     QVariant data(const QModelIndex& index, int role) const override;
-
-private:
     void fill_model_from_file(QString path);
 
+private:
     std::vector<FileContainer> remote_files;
     QObject *parent;
 };

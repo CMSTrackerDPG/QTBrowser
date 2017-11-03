@@ -59,7 +59,7 @@ void ConcatinatePlugin::concatinateCheckedItems() {
         }
     }
 
-    ui->widget->concatinatePlots(plots, "title");
+    ui->widget->concatinatePlots(plots, plot_title.toStdString());
 }
 
 void ConcatinatePlugin::removeSelectedFromList()
@@ -78,7 +78,6 @@ void ConcatinatePlugin::customMenuRequested(QPoint pos){
     menu->popup(ui->listWidget->viewport()->mapToGlobal(pos));
     connect(remove_selection_action, &QAction::triggered, [this]() { removeSelectedFromList(); });
 }
-
 
 void ConcatinatePlugin::on_pushButton_clicked()
 {
@@ -102,7 +101,7 @@ void ConcatinatePlugin::on_pushButton_2_clicked()
     concatinateCheckedItems();
 }
 
-void ConcatinatePlugin::on_listWidget_itemChanged(QListWidgetItem *item)
+void ConcatinatePlugin::on_listWidget_itemChanged(QListWidgetItem* /*item*/)
 {
     concatinateCheckedItems();
 }

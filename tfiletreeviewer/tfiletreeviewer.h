@@ -30,7 +30,7 @@ private slots:
     void on_pushButton_clicked();
 
 private:
-    void add_root_file_as_tree(QString file_path);
+    void addTFileToTree(QString file_path);
     void visit(TKey* td, QString current_path, QStandardItem* parent, QString file_path);
     void remove_tree_item(QModelIndex idx);
     void previewItem(QModelIndex idx);

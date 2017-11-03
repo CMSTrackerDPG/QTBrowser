@@ -18,7 +18,7 @@ public:
     ~DQMFileDownloader();
 
     // this is static so that QtConcurrent accepts it without having to write a wrapper
-    static void download_tfile_from_url(QString download_path, QString url);
+    static void download_tfile_from_url(QString name, QString url);
 
 private slots:
     void on_pushButton_clicked();
@@ -31,7 +31,11 @@ private:
     bool isValidSettings();
 
     Ui::DQMFileDownloader *ui;
-    RemoteFilesModel      *remote_files_model;
+    RemoteFilesModel      *ONLINE_remote_files_model;
+//    TODO: Maybe?
+//    RemoteFilesModel      *OFFLINE_remote_files_model;
+//    RemoteFilesModel      *RELVAL_remote_files_model;
+
     QSortFilterProxyModel *proxy_remote_files_model;
 };
 

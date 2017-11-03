@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QMenu>
 #include <QFileDialog>
+#include <QKeyEvent>
 
 #include <TROOT.h>
 #include <TFile.h>
@@ -36,7 +37,7 @@ TFileTreeViewer::TFileTreeViewer(QWidget *parent) :
     connect(ui->treeView, SIGNAL(customContextMenuRequested(QPoint)),
             this,         SLOT(on_treeView_customContextMenuRequested(QPoint)));
 
-    add_root_file_as_tree("/home/fil/projects/dqmPlotter/f1.root");
+    addTFileToTree("/home/fil/projects/dqmPlotter/f1.root");
 }
 
 TFileTreeViewer::~TFileTreeViewer()
@@ -110,13 +111,13 @@ void TFileTreeViewer::on_pushButton_clicked()
     QString file_name = QFileDialog::getOpenFileName(this, tr("Select"), dl_path, tr("ROOT files (*.root)"));
 
     if(file_name.length()) {
-        add_root_file_as_tree(file_name);
+        addTFileToTree(file_name);
         on_filterLineEdit_returnPressed();
     }
 }
 
 //___________________________ TREE TRAVERSAL ___________________________
-void TFileTreeViewer::add_root_file_as_tree(QString file_path){
+void TFileTreeViewer::addTFileToTree(QString file_path){
     TFile* f = TFile::Open(file_path.toStdString().c_str());
 
     QStandardItem* parent_item = new QStandardItem(file_path);

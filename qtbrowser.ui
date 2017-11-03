@@ -6,76 +6,54 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>691</width>
-    <height>667</height>
+    <width>671</width>
+    <height>855</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>QTBrowser</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout_2">
+   <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
      <widget class="QSplitter" name="splitter">
-      <property name="font">
-       <font>
-        <weight>50</weight>
-        <bold>false</bold>
-       </font>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Plain</enum>
-      </property>
-      <property name="lineWidth">
-       <number>1</number>
-      </property>
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <property name="opaqueResize">
-       <bool>true</bool>
-      </property>
-      <property name="handleWidth">
-       <number>2</number>
-      </property>
-      <widget class="QWidget" name="layoutWidget">
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
-         <widget class="QTabWidget" name="tabWidget">
-          <property name="minimumSize">
-           <size>
-            <width>400</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="currentIndex">
-           <number>1</number>
-          </property>
-          <widget class="QWidget" name="tab_2">
-           <attribute name="title">
-            <string>Download Files</string>
-           </attribute>
-           <layout class="QHBoxLayout" name="horizontalLayout_2">
-            <item>
-             <widget class="DQMFileDownloader" name="widget_2" native="true"/>
-            </item>
-           </layout>
-          </widget>
-          <widget class="QWidget" name="tab">
-           <attribute name="title">
-            <string>View Downloaded Files</string>
-           </attribute>
-           <layout class="QVBoxLayout" name="verticalLayout_3">
-            <item>
-             <widget class="TFileTreeViewer" name="widget_3" native="true"/>
-            </item>
-           </layout>
-          </widget>
-         </widget>
-        </item>
-       </layout>
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="minimumSize">
+        <size>
+         <width>400</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Download Files available in the dqmGUI</string>
+       </property>
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="tab_2">
+        <attribute name="title">
+         <string>Download Files</string>
+        </attribute>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="DQMFileDownloader" name="widget_2" native="true"/>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tab">
+        <attribute name="title">
+         <string>TFile Browser</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="TFileTreeViewer" name="widget_3" native="true"/>
+         </item>
+        </layout>
+       </widget>
       </widget>
-      <widget class="SuperimposePlugin" name="widget" native="true"/>
      </widget>
     </item>
    </layout>
@@ -85,13 +63,13 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>691</width>
+     <width>671</width>
      <height>28</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuRemote_Files">
     <property name="title">
-     <string>Edit</string>
+     <string>Fi&amp;le</string>
     </property>
     <addaction name="actionSettings"/>
    </widget>
@@ -99,6 +77,9 @@
     <property name="title">
      <string>Pl&amp;ugins</string>
     </property>
+    <addaction name="actionSuperimpose"/>
+    <addaction name="actionConcatinate"/>
+    <addaction name="separator"/>
     <addaction name="actionAbout_Plugins"/>
    </widget>
    <addaction name="menuRemote_Files"/>
@@ -123,15 +104,19 @@
     <string>&amp;About Plugins</string>
    </property>
   </action>
+  <action name="actionSuperimpose">
+   <property name="text">
+    <string>&amp;Superimpose</string>
+   </property>
+  </action>
+  <action name="actionConcatinate">
+   <property name="text">
+    <string>&amp;Concatinate</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
-  <customwidget>
-   <class>SuperimposePlugin</class>
-   <extends>QWidget</extends>
-   <header>plugins/superimposeplugin.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>DQMFileDownloader</class>
    <extends>QWidget</extends>

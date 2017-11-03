@@ -15,11 +15,11 @@ public:
     static SettingsManager& getInstance();
     void writeSettings(SETTING s, QString value);
     QString getSetting(SETTING s);
+    void printAllSettings();
 
 private:
     SettingsManager(){}
     static SettingsManager* instance_;
-
 
 // FIXME: OPTIONS
 // REQUIRES: QT5/c++11 & >gcc6.0

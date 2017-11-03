@@ -17,10 +17,12 @@ DQMFileDownloader::DQMFileDownloader(QWidget *parent) :
     ui(new Ui::DQMFileDownloader)
 {
     ui->setupUi(this);
-    remote_files_model = new RemoteFilesModel(this);
+
+    ONLINE_remote_files_model = new RemoteFilesModel(this);
+    ONLINE_remote_files_model->fill_model_from_file("/home/fil/projects/DQMFileDownloader/remote_files.txt");
 
     proxy_remote_files_model = new QSortFilterProxyModel(this);
-    proxy_remote_files_model->setSourceModel(remote_files_model);
+    proxy_remote_files_model->setSourceModel(ONLINE_remote_files_model);
 
     ui->listView->setModel(proxy_remote_files_model);
     ui->listView->setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -38,8 +40,6 @@ void DQMFileDownloader::download_tfile_from_url(QString download_path, QString u
         f->Cp(download_path.toStdString().c_str());
         f->Close();
     }
-
-    qDebug() << url << " downloaded: " << (bool)f;
 }
 
 void DQMFileDownloader::on_pushButton_clicked()
@@ -52,12 +52,15 @@ void DQMFileDownloader::on_pushButton_clicked()
     }
 
     setupCertificates();
-    QString download_base_path = SettingsManager::getInstance().getSetting(SETTING::DOWNLOAD_PATH);
+
+    auto& sm = SettingsManager::getInstance();
+    QString download_base_path = QFileDialog::getExistingDirectory(this, tr("Select"), sm.getSetting(SETTING::DOWNLOAD_PATH));
+    sm.writeSettings(SETTING::DOWNLOAD_PATH, download_base_path);
 
     for(auto& e : ui->listView->selectionModel()->selectedIndexes()) {
         auto real_idx = proxy_remote_files_model->mapToSource(e);
-        QString name = remote_files_model->data(real_idx, Qt::DisplayRole).toString();
-        QString url  = remote_files_model->getFilepath(real_idx);
+        QString name = ONLINE_remote_files_model->data(real_idx, Qt::DisplayRole).toString();
+        QString url  = ONLINE_remote_files_model->getFilepath(real_idx);
         QString download_path =  download_base_path + "/" + name;
         QtConcurrent::run(DQMFileDownloader::download_tfile_from_url, download_path, url);
     }

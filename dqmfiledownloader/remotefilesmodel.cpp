@@ -8,7 +8,6 @@
 RemoteFilesModel::RemoteFilesModel(QObject* parent)
 {
     this->parent = parent;
-    fill_model_from_file("/home/fil/projects/DQMFileDownloader/remote_files.txt");
 }
 
 void RemoteFilesModel::fill_model_from_file(QString path)

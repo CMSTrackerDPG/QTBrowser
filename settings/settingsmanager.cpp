@@ -1,4 +1,5 @@
 #include "settingsmanager.h"
+#include <QDebug>
 
 SettingsManager* SettingsManager::instance_ = nullptr;
 
@@ -19,4 +20,11 @@ QString SettingsManager::getSetting(SETTING s) {
     QSettings settings(settings_file_path, QSettings::IniFormat);
     QString key = map.value(s);
     return settings.value(key).toString();
+}
+
+void SettingsManager::printAllSettings()
+{
+    for(auto& setting : map) {
+        qDebug() << setting << ": " << getSetting(map.key(setting));
+    }
 }
