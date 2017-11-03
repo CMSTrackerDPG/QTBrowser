@@ -28,7 +28,7 @@ ConcatinatePlugin::~ConcatinatePlugin()
     delete ui;
 }
 
-void ConcatinatePlugin::receiveTObj(TObjectContainer& container)
+void ConcatinatePlugin::receiveTObjectContainer(TObjectContainer& container)
 {
     TObject* obj = container.getObject();
     bool is_directory = (obj->IsA() == TDirectoryFile::Class());

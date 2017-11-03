@@ -94,7 +94,7 @@
       <widget class="QRootCanvas" name="widget_2" native="true">
        <property name="minimumSize">
         <size>
-         <width>500</width>
+         <width>200</width>
          <height>0</height>
         </size>
        </property>

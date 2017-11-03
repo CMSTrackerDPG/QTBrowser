@@ -28,7 +28,7 @@ SuperimposePlugin::~SuperimposePlugin()
     delete ui;
 }
 
-void SuperimposePlugin::receiveTObj(TObjectContainer& container)
+void SuperimposePlugin::receiveTObjectContainer(TObjectContainer& container)
 {
     TObject* obj = container.getObject();
     bool is_directory = (obj->IsA() == TDirectoryFile::Class());

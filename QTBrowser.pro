@@ -29,7 +29,6 @@ HEADERS  += \
     qtbrowser.h \
     qrootcanvas.h \
     tobjectcontainer.h \
-    leafsortfilterproxymodel.h \
     previewqrootcanvas.h \
     settings/settingsdialog.h \
     settings/settingsmanager.h \
@@ -40,6 +39,7 @@ HEADERS  += \
     plugins/superimposeplugin.h \
     plugins/concatinateplugin.h \
     tfiletreeviewer/tfiletreeviewer.h
+    tfiletreeviewer/leafsortfilterproxymodel.h \
 
 FORMS    += \
     previewqrootcanvas.ui \

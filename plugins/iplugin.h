@@ -18,7 +18,7 @@ public:
     virtual ~IPlugin() {}
 
 public slots:
-    virtual void receiveTObj(TObjectContainer& container) = 0;
+    virtual void receiveTObjectContainer(TObjectContainer& container) = 0;
 };
 
 #endif // IPLUGIN_H

@@ -20,7 +20,7 @@ public:
 
     // IPlugin interface
 public slots:
-    void receiveTObj(TObjectContainer& container) override;
+    void receiveTObjectContainer(TObjectContainer& container) override;
 
 private slots:
     void customMenuRequested(QPoint pos);
