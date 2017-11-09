@@ -9,6 +9,8 @@
 #include <TApplication.h>
 
 #include "plugins/iplugin.h"
+#include "tfiletreeviewer/tfiletreeviewer.h"
+#include "dqmfiledownloader/dqmfiledownloader.h"
 
 namespace Ui {
 class QTBrowser;
@@ -22,12 +24,12 @@ public:
     explicit QTBrowser(QWidget *parent = 0);
     ~QTBrowser();
 
+public slots:
+    void on_finishedDownloadFile(QString file_path);
+
 private slots:
     void on_actionSettings_triggered();
-
-
     void on_actionSuperimpose_triggered();
-
     void on_actionConcatinate_triggered();
 
 private:
@@ -36,7 +38,8 @@ private:
 
     Ui::QTBrowser *ui;
     TApplication* rootapp;
-    QWidget* filebrowser_tree;
+    DQMFileDownloader* filedownloader;
+    TFileTreeViewer* filebrowser_tree;
     QWidget* active_plugin;
 };
 

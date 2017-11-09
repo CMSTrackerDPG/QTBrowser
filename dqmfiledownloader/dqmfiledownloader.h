@@ -17,14 +17,18 @@ public:
     DQMFileDownloader(QWidget *parent = 0);
     ~DQMFileDownloader();
 
-    // this is static so that QtConcurrent accepts it without having to write a wrapper
-    static void download_tfile_from_url(QString name, QString url);
+    bool download_tfile_from_url(QString name, QString url);
+
+signals:
+    void on_finishedDownloadFile(QString file_path);
 
 private slots:
     void on_pushButton_clicked();
     void on_listView_doubleClicked(const QModelIndex &index);
     void on_actionPreferences_triggered();
     void on_lineEdit_returnPressed();
+
+    void on_pushButton_2_clicked();
 
 private:
     void setupCertificates();

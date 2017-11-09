@@ -25,13 +25,27 @@ QTBrowser::QTBrowser(QWidget *parent) :
 {
     rootapp = new TApplication("ROOT Application", 0, 0);
     ui->setupUi(this);
+    filedownloader   = ui->widget_2;
     filebrowser_tree = ui->widget_3;
+
+
+    // When a download finishes, qtbrowser catches the signal
+    // switches the tab to the treeview, and tells the treeview
+    // to load the downloaded file in its view
+    connect(filedownloader, SIGNAL(on_finishedDownloadFile(QString)),
+            this,           SLOT(on_finishedDownloadFile(QString)));
 }
 
 QTBrowser::~QTBrowser()
 {
     delete ui;
     delete rootapp;
+}
+
+void QTBrowser::on_finishedDownloadFile(QString file_path)
+{
+    ui->tabWidget->setCurrentIndex(1);
+    filebrowser_tree->addTFileToTree(file_path);
 }
 
 void QTBrowser::on_actionSettings_triggered()

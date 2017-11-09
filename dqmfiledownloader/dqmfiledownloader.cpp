@@ -1,7 +1,6 @@
 #include <QFileDialog>
 #include <QDebug>
 #include <QSortFilterProxyModel>
-#include <QtConcurrent/QtConcurrent>
 #include <QMessageBox>
 
 #include <TEnv.h>
@@ -19,7 +18,7 @@ DQMFileDownloader::DQMFileDownloader(QWidget *parent) :
     ui->setupUi(this);
 
     ONLINE_remote_files_model = new RemoteFilesModel(this);
-    ONLINE_remote_files_model->fill_model_from_file("/home/fil/projects/DQMFileDownloader/remote_files.txt");
+//    ONLINE_remote_files_model->fill_model_from_file("/home/fil/projects/DQMFileDownloader/remote_files.txt");
 
     proxy_remote_files_model = new QSortFilterProxyModel(this);
     proxy_remote_files_model->setSourceModel(ONLINE_remote_files_model);
@@ -33,38 +32,17 @@ DQMFileDownloader::~DQMFileDownloader()
     delete ui;
 }
 
-void DQMFileDownloader::download_tfile_from_url(QString download_path, QString url)
+bool DQMFileDownloader::download_tfile_from_url(QString download_path, QString url)
 {
     TFile* f = TFile::Open(url.toStdString().c_str());
     if(f) {
         f->Cp(download_path.toStdString().c_str());
         f->Close();
     }
+
+    return (f ? true : false);
 }
 
-void DQMFileDownloader::on_pushButton_clicked()
-{
-    if(!isValidSettings()){
-        QMessageBox::information(this,
-                                tr("DQMFileDownloader"),
-                                tr("Settings are not valid! (Edit->Settings)") );
-        return;
-    }
-
-    setupCertificates();
-
-    auto& sm = SettingsManager::getInstance();
-    QString download_base_path = QFileDialog::getExistingDirectory(this, tr("Select"), sm.getSetting(SETTING::DOWNLOAD_PATH));
-    sm.writeSettings(SETTING::DOWNLOAD_PATH, download_base_path);
-
-    for(auto& e : ui->listView->selectionModel()->selectedIndexes()) {
-        auto real_idx = proxy_remote_files_model->mapToSource(e);
-        QString name = ONLINE_remote_files_model->data(real_idx, Qt::DisplayRole).toString();
-        QString url  = ONLINE_remote_files_model->getFilepath(real_idx);
-        QString download_path =  download_base_path + "/" + name;
-        QtConcurrent::run(DQMFileDownloader::download_tfile_from_url, download_path, url);
-    }
-}
 
 void DQMFileDownloader::on_listView_doubleClicked(const QModelIndex &index)
 {
@@ -107,4 +85,62 @@ void DQMFileDownloader::on_lineEdit_returnPressed()
 {
     QString filter = ui->lineEdit->text();
     proxy_remote_files_model->setFilterRegExp(filter);
+}
+
+
+// DOWNLOAD ONLY
+void DQMFileDownloader::on_pushButton_clicked()
+{
+    //todo: extract function
+    if(!isValidSettings()){
+        QMessageBox::information(this,
+                                 tr("DQMFileDownloader"),
+                                 tr("Settings are not valid! (Edit->Settings)") );
+        return;
+    }
+
+    setupCertificates();
+
+    auto& sm = SettingsManager::getInstance();
+    QString download_base_path = QFileDialog::getExistingDirectory(this, tr("Select"), sm.getSetting(SETTING::DOWNLOAD_PATH));
+    sm.writeSettings(SETTING::DOWNLOAD_PATH, download_base_path);
+
+    for(auto& e : ui->listView->selectionModel()->selectedIndexes()) {
+        auto real_idx = proxy_remote_files_model->mapToSource(e);
+        QString name = ONLINE_remote_files_model->data(real_idx, Qt::DisplayRole).toString();
+        QString url  = ONLINE_remote_files_model->getFilepath(real_idx);
+        QString download_path =  download_base_path + "/" + name;
+        download_tfile_from_url(download_path, url);
+    }
+}
+
+
+// DOWNLOAD AND OPEN IN TREEVIEW
+void DQMFileDownloader::on_pushButton_2_clicked()
+{
+    //todo: extract function
+    if(!isValidSettings()){
+        QMessageBox::information(this,
+                                 tr("DQMFileDownloader"),
+                                 tr("Settings are not valid! (Edit->Settings)") );
+        return;
+    }
+
+    setupCertificates();
+
+    auto& sm = SettingsManager::getInstance();
+    QString download_base_path = QFileDialog::getExistingDirectory(this, tr("Select"), sm.getSetting(SETTING::DOWNLOAD_PATH));
+    sm.writeSettings(SETTING::DOWNLOAD_PATH, download_base_path);
+
+    for(auto& e : ui->listView->selectionModel()->selectedIndexes()) {
+        auto real_idx = proxy_remote_files_model->mapToSource(e);
+        QString name = ONLINE_remote_files_model->data(real_idx, Qt::DisplayRole).toString();
+        QString url  = ONLINE_remote_files_model->getFilepath(real_idx);
+        QString download_path =  download_base_path + "/" + name;
+
+        bool download_success = download_tfile_from_url(download_path, url);
+        if (download_success) {
+            on_finishedDownloadFile(download_path);
+        }
+    }
 }

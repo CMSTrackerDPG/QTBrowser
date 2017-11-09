@@ -23,6 +23,9 @@ public:
 signals:
     void sendTObjectContainer(TObjectContainer& obj);
 
+public slots:
+    void addTFileToTree(QString file_path);
+
 private slots:
     void on_treeView_doubleClicked(const QModelIndex &index);
     void on_filterLineEdit_returnPressed();
@@ -30,7 +33,6 @@ private slots:
     void on_pushButton_clicked();
 
 private:
-    void addTFileToTree(QString file_path);
     void visit(TKey* td, QString current_path, QStandardItem* parent, QString file_path);
     void remove_tree_item(QModelIndex idx);
     void previewItem(QModelIndex idx);

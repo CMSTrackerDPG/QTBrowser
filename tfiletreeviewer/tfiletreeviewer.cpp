@@ -37,7 +37,7 @@ TFileTreeViewer::TFileTreeViewer(QWidget *parent) :
     connect(ui->treeView, SIGNAL(customContextMenuRequested(QPoint)),
             this,         SLOT(on_treeView_customContextMenuRequested(QPoint)));
 
-    addTFileToTree("/home/fil/projects/dqmPlotter/f1.root");
+//    addTFileToTree("/home/fil/projects/dqmPlotter/f1.root");
 }
 
 TFileTreeViewer::~TFileTreeViewer()
