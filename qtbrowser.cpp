@@ -23,7 +23,7 @@ QTBrowser::QTBrowser(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::QTBrowser)
 {
-    rootapp = new TApplication("ROOT Application", 0, 0);
+//    rootapp = new TApplication("ROOT Application", 0, 0);
     ui->setupUi(this);
     filedownloader   = ui->widget_2;
     filebrowser_tree = ui->widget_3;

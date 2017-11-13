@@ -92,7 +92,7 @@ void SuperimposePlugin::customMenuRequested(QPoint pos){
     QAction* remove_selection_action  = new QAction("Remove Selected Items", this);
     menu->addAction(remove_selection_action);
     menu->popup(ui->listWidget->viewport()->mapToGlobal(pos));
-    connect(remove_selection_action, &QAction::triggered, [this]() { removeSelectedFromList(); });
+//    connect(remove_selection_action, &QAction::triggered, [this]() { removeSelectedFromList(); });
 }
 
 

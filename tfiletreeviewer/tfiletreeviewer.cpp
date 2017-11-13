@@ -101,8 +101,8 @@ void TFileTreeViewer::on_treeView_customContextMenuRequested(const QPoint &pos)
 
     menu->popup(ui->treeView->viewport()->mapToGlobal(pos));
 
-    connect(preview_item_action, &QAction::triggered, [this, index]() { previewItem(index); });
-    connect(remove_item_action,  &QAction::triggered, [this, index]() { remove_tree_item(index); });
+//    connect(preview_item_action, &QAction::triggered, [this, index]() { previewItem(index); });
+//    connect(remove_item_action,  &QAction::triggered, [this, index]() { remove_tree_item(index); });
 }
 
 void TFileTreeViewer::on_pushButton_clicked()

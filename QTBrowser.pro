@@ -38,7 +38,7 @@ HEADERS  += \
     plugins/iplugin.h \
     plugins/superimposeplugin.h \
     plugins/concatinateplugin.h \
-    tfiletreeviewer/tfiletreeviewer.h
+    tfiletreeviewer/tfiletreeviewer.h \
     tfiletreeviewer/leafsortfilterproxymodel.h \
 
 FORMS    += \
@@ -50,11 +50,15 @@ FORMS    += \
     plugins/concatinateplugin.ui \
     tfiletreeviewer/tfiletreeviewer.ui
 
-# FIXME: Link statically
+
+#when compiling on vocms
+
+#when developing locally and libraries are installed
 LIBS     += -L/usr/local/lib -lGui -lCore -lImt -lRIO -lNet \
             -lHist -lGraf -lGraf3d -lGpad -lTree -lTreePlayer \
             -lRint -lPostscript -lMatrix -lPhysics \
             -lMathCore -lThread -lMultiProc -pthread -lm -ldl -rdynamic
+
 
 
 
