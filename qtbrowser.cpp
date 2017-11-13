@@ -23,11 +23,9 @@ QTBrowser::QTBrowser(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::QTBrowser)
 {
-//    rootapp = new TApplication("ROOT Application", 0, 0);
     ui->setupUi(this);
     filedownloader   = ui->widget_2;
     filebrowser_tree = ui->widget_3;
-
 
     // When a download finishes, qtbrowser catches the signal
     // switches the tab to the treeview, and tells the treeview
@@ -38,6 +36,8 @@ QTBrowser::QTBrowser(QWidget *parent) :
 
 QTBrowser::~QTBrowser()
 {
+    //FIXME: something from ROOT causes segfaults at program exit
+    rootapp->Terminate(0);
     delete ui;
     delete rootapp;
 }
@@ -57,6 +57,10 @@ void QTBrowser::on_actionSettings_triggered()
 
 void QTBrowser::addPlugin(QString name)
 {
+    if(rootapp == nullptr) {
+        rootapp = new TApplication("ROOT Application", 0, 0);
+    }
+
     removeActivePlugin();
 
     if(name.compare("Superimpose") == 0)

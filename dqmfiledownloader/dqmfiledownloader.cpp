@@ -18,7 +18,7 @@ DQMFileDownloader::DQMFileDownloader(QWidget *parent) :
     ui->setupUi(this);
 
     ONLINE_remote_files_model = new RemoteFilesModel(this);
-//    ONLINE_remote_files_model->fill_model_from_file("/home/fil/projects/DQMFileDownloader/remote_files.txt");
+//    ONLINE_remote_files_model->fill_model_from_file("/home/fil/projects/QTBrowser/dqmfiledownloader/test.txt");
 
     proxy_remote_files_model = new QSortFilterProxyModel(this);
     proxy_remote_files_model->setSourceModel(ONLINE_remote_files_model);
@@ -39,10 +39,8 @@ bool DQMFileDownloader::download_tfile_from_url(QString download_path, QString u
         f->Cp(download_path.toUtf8().constData());
         f->Close();
     }
-
-    return (f ? true : false);
+    return f;
 }
-
 
 void DQMFileDownloader::on_listView_doubleClicked(const QModelIndex &index)
 {
@@ -71,14 +69,15 @@ bool DQMFileDownloader::isValidSettings()
 {
     auto& inst = SettingsManager::getInstance();
 
-    bool is_settings_set = inst.getSetting(SETTING::DOWNLOAD_PATH).compare("") &&
-                           inst.getSetting(SETTING::USER_CERTIFICATE_PATH).compare("") &&
-                           inst.getSetting(SETTING::USER_KEY_PATH).compare("");
+    //TODO: this is garbage
+//    bool is_settings_set = inst.getSetting(SETTING::USER_CERTIFICATE_PATH).compare("") &&
+//                           inst.getSetting(SETTING::USER_KEY_PATH).compare("");
 
-    bool is_valid_cert_key; // TODO: find resource on server that can be used to verify
-                            //       if the certificate+key are valid
+//    bool is_valid_cert_key; // TODO: find resource on server that can be used to verify
+//                            //       if the certificate+key are valid
 
-    return is_settings_set;
+//    return is_settings_set;
+    return true;
 }
 
 void DQMFileDownloader::on_lineEdit_returnPressed()
@@ -103,6 +102,9 @@ void DQMFileDownloader::on_pushButton_clicked()
 
     auto& sm = SettingsManager::getInstance();
     QString download_base_path = QFileDialog::getExistingDirectory(this, tr("Select"), sm.getSetting(SETTING::DOWNLOAD_PATH));
+
+    if(!download_base_path.compare("")) return;
+
     sm.writeSettings(SETTING::DOWNLOAD_PATH, download_base_path);
 
     for(auto& e : ui->listView->selectionModel()->selectedIndexes()) {
@@ -130,6 +132,9 @@ void DQMFileDownloader::on_pushButton_2_clicked()
 
     auto& sm = SettingsManager::getInstance();
     QString download_base_path = QFileDialog::getExistingDirectory(this, tr("Select"), sm.getSetting(SETTING::DOWNLOAD_PATH));
+
+    if(!download_base_path.compare("")) return;
+
     sm.writeSettings(SETTING::DOWNLOAD_PATH, download_base_path);
 
     for(auto& e : ui->listView->selectionModel()->selectedIndexes()) {

@@ -26,6 +26,7 @@ void RemoteFilesModel::fill_model_from_file(QString path)
         QString display_name = path.mid(tmp+1);
         remote_files.push_back(FileContainer(display_name, path));
     }
+
 }
 
 int RemoteFilesModel::rowCount(const QModelIndex& parent) const

@@ -16,11 +16,7 @@ SuperimposePlugin::SuperimposePlugin(QWidget *parent) :
     ui(new Ui::SuperimposePlugin)
 {
     ui->setupUi(this);
-    ui->listWidget->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->listWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
-
-    connect(ui->listWidget, SIGNAL(customContextMenuRequested(QPoint)),
-            this,           SLOT(customMenuRequested(QPoint)));
 }
 
 SuperimposePlugin::~SuperimposePlugin()
@@ -49,7 +45,7 @@ void SuperimposePlugin::receiveTObjectContainer(TObjectContainer& container)
 
 void SuperimposePlugin::displayCheckedInPreview()
 {
-    ui->widget->clear();
+    ui->preview_canvas->clear();
 
     std::vector<TH1*> plots;
     for (int i = 0; i < ui->listWidget->count(); i++) {
@@ -61,12 +57,12 @@ void SuperimposePlugin::displayCheckedInPreview()
         }
     }
 
-    ui->widget_2->draw(plots);
+    ui->preview_canvas->draw(plots);
 }
 
 void SuperimposePlugin::superimposeCheckedItems()
 {
-    ui->widget->clear();
+    ui->superimpose_canvas->clear();
 
     std::vector<TH1*> plots;
     for (int i = 0; i < ui->listWidget->count(); i++) {
@@ -81,32 +77,13 @@ void SuperimposePlugin::superimposeCheckedItems()
     if(!plots.size()) return;
 
     if(is_multiaxis_enable)
-        ui->widget->superimpose_multiaxis(plots, std::string(plot_title.toUtf8().constData()));
+        ui->superimpose_canvas->superimpose_multiaxis(plots, std::string(plot_title.toUtf8().constData()));
     else
-        ui->widget->superimpose(plots, std::string(plot_title.toUtf8().constData()));
+        ui->superimpose_canvas->superimpose(plots, std::string(plot_title.toUtf8().constData()));
 }
-
-void SuperimposePlugin::customMenuRequested(QPoint pos){
-//    QModelIndex index= ui->listWidget->indexAt(pos);
-    QMenu* menu = new QMenu(this);
-    QAction* remove_selection_action  = new QAction("Remove Selected Items", this);
-    menu->addAction(remove_selection_action);
-    menu->popup(ui->listWidget->viewport()->mapToGlobal(pos));
-//    connect(remove_selection_action, &QAction::triggered, [this]() { removeSelectedFromList(); });
-}
-
 
 void SuperimposePlugin::on_listWidget_itemChanged(QListWidgetItem* /*item*/)
 {
-    displayCheckedInPreview();
-    superimposeCheckedItems();
-}
-
-void SuperimposePlugin::removeSelectedFromList()
-{
-    for(auto& e : ui->listWidget->selectedItems()) {
-        delete e;
-    }
     displayCheckedInPreview();
     superimposeCheckedItems();
 }
@@ -119,12 +96,21 @@ void SuperimposePlugin::on_pushButton_clicked()
 
 void SuperimposePlugin::on_pushButton_2_clicked()
 {
-    auto filename = QFileDialog::getSaveFileName(this, "stuff", "/home/");
-    ui->widget->saveAs(std::string(filename.toUtf8().constData()));
+    auto filename = QFileDialog::getSaveFileName(this, "Save Dialog", "/home/");
+    ui->superimpose_canvas->saveAs(std::string(filename.toUtf8().constData()));
 }
 
 void SuperimposePlugin::on_checkBox_clicked()
 {
     is_multiaxis_enable = (ui->checkBox->checkState() == Qt::Checked);
+    superimposeCheckedItems();
+}
+
+void SuperimposePlugin::on_pushButton_3_clicked()
+{
+    for(auto& e : ui->listWidget->selectedItems()) {
+        delete e;
+    }
+    displayCheckedInPreview();
     superimposeCheckedItems();
 }

@@ -16,11 +16,7 @@ ConcatinatePlugin::ConcatinatePlugin(QWidget *parent) :
     ui(new Ui::ConcatinatePlugin)
 {
     ui->setupUi(this);
-    ui->listWidget->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->listWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
-
-    connect(ui->listWidget, SIGNAL(customContextMenuRequested(QPoint)),
-            this,           SLOT(customMenuRequested(QPoint)));
 }
 
 ConcatinatePlugin::~ConcatinatePlugin()
@@ -62,22 +58,6 @@ void ConcatinatePlugin::concatinateCheckedItems() {
     ui->widget->concatinatePlots(plots, std::string(plot_title.toUtf8().constData()));
 }
 
-void ConcatinatePlugin::removeSelectedFromList()
-{
-    for(auto& e : ui->listWidget->selectedItems()) {
-        delete e;
-    }
-    concatinateCheckedItems();
-}
-
-void ConcatinatePlugin::customMenuRequested(QPoint pos){
-//    QModelIndex index= ui->listWidget->indexAt(pos);
-    QMenu* menu = new QMenu(this);
-    QAction* remove_selection_action  = new QAction("Remove Selected Items", this);
-    menu->addAction(remove_selection_action);
-    menu->popup(ui->listWidget->viewport()->mapToGlobal(pos));
-//    connect(remove_selection_action, &QAction::triggered, [this]() { removeSelectedFromList(); });
-}
 
 void ConcatinatePlugin::on_pushButton_clicked()
 {
@@ -118,4 +98,12 @@ void ConcatinatePlugin::on_pushButton_4_clicked()
     //save as
     auto filename = QFileDialog::getSaveFileName(this, "stuff", "/home/");
     ui->widget->saveAs(filename.toUtf8().constData());
+}
+
+void ConcatinatePlugin::on_pushButton_5_clicked()
+{
+    for(auto& e : ui->listWidget->selectedItems()) {
+        delete e;
+    }
+    concatinateCheckedItems();
 }

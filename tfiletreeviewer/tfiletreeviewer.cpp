@@ -5,6 +5,7 @@
 #include <QMenu>
 #include <QFileDialog>
 #include <QKeyEvent>
+#include <QSignalMapper>
 
 #include <TROOT.h>
 #include <TFile.h>
@@ -26,17 +27,12 @@ TFileTreeViewer::TFileTreeViewer(QWidget *parent) :
 
     ui->treeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->treeView->header()->close();
-    ui->treeView->setContextMenuPolicy(Qt::CustomContextMenu);
-
     model = new QStandardItemModel;
 
     proxy_model = new LeafSortFilterProxyModel;
     proxy_model->setSourceModel(model);
 
     ui->treeView->setModel(proxy_model);
-
-    connect(ui->treeView, SIGNAL(customContextMenuRequested(QPoint)),
-            this,         SLOT(on_treeView_customContextMenuRequested(QPoint)));
 
 //    addTFileToTree("/home/fil/projects/dqmPlotter/f1.root");
 }
@@ -47,12 +43,14 @@ TFileTreeViewer::~TFileTreeViewer()
 }
 
 
+//TODO: not used
 // removes the idx item and its children.
-void TFileTreeViewer::remove_tree_item(QModelIndex idx) {
+void TFileTreeViewer::removeTreeItem(QModelIndex idx) {
     proxy_model->removeColumn(0, idx);
     proxy_model->removeRow(idx.row(), idx.parent());
 }
 
+//TODO: not used
 void TFileTreeViewer::previewItem(QModelIndex idx)
 {
     TObjectContainer* o = idx.data(Qt::UserRole + 1).value<TObjectContainer*>();
@@ -87,23 +85,6 @@ void TFileTreeViewer::on_treeView_doubleClicked(const QModelIndex &index)
         qDebug() << o->getTitle();
         sendTObjectContainer(*o);
     }
-}
-
-void TFileTreeViewer::on_treeView_customContextMenuRequested(const QPoint &pos)
-{
-    QModelIndex index= ui->treeView->indexAt(pos);
-
-    QMenu* menu = new QMenu(this);
-    QAction* preview_item_action = new QAction("Preview", this);
-    QAction* remove_item_action  = new QAction("Remove", this);
-
-    menu->addAction(preview_item_action);
-    menu->addAction(remove_item_action);
-
-    menu->popup(ui->treeView->viewport()->mapToGlobal(pos));
-
-//    connect(preview_item_action, &QAction::triggered, [this, index]() { previewItem(index); });
-//    connect(remove_item_action,  &QAction::triggered, [this, index]() { remove_tree_item(index); });
 }
 
 void TFileTreeViewer::on_pushButton_clicked()
@@ -152,9 +133,9 @@ void TFileTreeViewer::visit(TKey* td, QString current_path, QStandardItem* paren
         if (cl1->InheritsFrom("TH1")) {
 
             QIcon icon;
-            QString th3 = "/home/fil/projects/roottreeviewer/icons/h3_t.xpm";
-            QString th2 = "/home/fil/projects/roottreeviewer/icons/h2_t.xpm";
-            QString th1 = "/home/fil/projects/roottreeviewer/icons/h1_t.xpm";
+            QString th3 = "/home/fil/projects/QTBrowser/icons/h3_t.xpm";
+            QString th2 = "/home/fil/projects/QTBrowser/icons/h2_t.xpm";
+            QString th1 = "/home/fil/projects/QTBrowser/icons/h1_t.xpm";
 
             if      (dynamic_cast<TH3*>(o))   icon = QIcon(th3);
             else if (dynamic_cast<TH2*>(o))   icon = QIcon(th2);
@@ -163,8 +144,26 @@ void TFileTreeViewer::visit(TKey* td, QString current_path, QStandardItem* paren
             item->setIcon(icon);
         }
 
+
         if(cl1->InheritsFrom("TDirectory")) {
             visit(key, current_path + "/" + QString(key->GetTitle()), item, file_path);
         }
     }
+}
+
+void TFileTreeViewer::on_pushButton_3_clicked()
+{
+    //preview selected
+    previewItem(ui->treeView->currentIndex());
+}
+
+void TFileTreeViewer::on_pushButton_2_clicked()
+{
+    //remove selected
+    removeTreeItem(ui->treeView->currentIndex());
+}
+
+void TFileTreeViewer::on_pushButton_4_clicked()
+{
+    on_filterLineEdit_returnPressed();
 }

@@ -23,17 +23,17 @@ public slots:
     void receiveTObjectContainer(TObjectContainer& container) override;
 
 private slots:
-    void customMenuRequested(QPoint pos);
     void on_listWidget_itemChanged(QListWidgetItem* item);
     void on_pushButton_clicked();
     void on_pushButton_2_clicked();
 
     void on_checkBox_clicked();
 
+    void on_pushButton_3_clicked();
+
 private:
     void superimposeCheckedItems();
     void displayCheckedInPreview();
-    void removeSelectedFromList();
 
     Ui::SuperimposePlugin *ui;
 

@@ -37,7 +37,7 @@ private:
     void removeActivePlugin();
 
     Ui::QTBrowser *ui;
-    TApplication* rootapp;
+    TApplication* rootapp = nullptr;
     DQMFileDownloader* filedownloader;
     TFileTreeViewer* filebrowser_tree;
     QWidget* active_plugin;
