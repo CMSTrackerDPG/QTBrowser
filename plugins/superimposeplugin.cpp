@@ -81,9 +81,9 @@ void SuperimposePlugin::superimposeCheckedItems()
     if(!plots.size()) return;
 
     if(is_multiaxis_enable)
-        ui->widget->superimpose_multiaxis(plots, plot_title.toStdString());
+        ui->widget->superimpose_multiaxis(plots, std::string(plot_title.toUtf8().constData()));
     else
-        ui->widget->superimpose(plots, plot_title.toStdString());
+        ui->widget->superimpose(plots, std::string(plot_title.toUtf8().constData()));
 }
 
 void SuperimposePlugin::customMenuRequested(QPoint pos){
@@ -120,7 +120,7 @@ void SuperimposePlugin::on_pushButton_clicked()
 void SuperimposePlugin::on_pushButton_2_clicked()
 {
     auto filename = QFileDialog::getSaveFileName(this, "stuff", "/home/");
-    ui->widget->saveAs(filename.toStdString());
+    ui->widget->saveAs(std::string(filename.toUtf8().constData()));
 }
 
 void SuperimposePlugin::on_checkBox_clicked()

@@ -11,6 +11,7 @@
 #include <TKey.h>
 #include <TH3.h>
 #include <TH2.h>
+#include <TClass.h>
 
 #include "tobjectcontainer.h"
 #include "previewqrootcanvas.h"
@@ -118,7 +119,7 @@ void TFileTreeViewer::on_pushButton_clicked()
 
 //___________________________ TREE TRAVERSAL ___________________________
 void TFileTreeViewer::addTFileToTree(QString file_path){
-    TFile* f = TFile::Open(file_path.toStdString().c_str());
+    TFile* f = TFile::Open(file_path.toUtf8().constData());
 
     QStandardItem* parent_item = new QStandardItem(file_path);
 

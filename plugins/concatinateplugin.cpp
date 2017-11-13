@@ -59,7 +59,7 @@ void ConcatinatePlugin::concatinateCheckedItems() {
         }
     }
 
-    ui->widget->concatinatePlots(plots, plot_title.toStdString());
+    ui->widget->concatinatePlots(plots, std::string(plot_title.toUtf8().constData()));
 }
 
 void ConcatinatePlugin::removeSelectedFromList()
@@ -117,5 +117,5 @@ void ConcatinatePlugin::on_pushButton_4_clicked()
 {
     //save as
     auto filename = QFileDialog::getSaveFileName(this, "stuff", "/home/");
-    ui->widget->saveAs(filename.toStdString());
+    ui->widget->saveAs(filename.toUtf8().constData());
 }

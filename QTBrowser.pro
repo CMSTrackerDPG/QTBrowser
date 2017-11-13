@@ -50,14 +50,21 @@ FORMS    += \
     plugins/concatinateplugin.ui \
     tfiletreeviewer/tfiletreeviewer.ui
 
+INCLUDEPATH += /cvmfs/cms.cern.ch/slc6_amd64_gcc630/lcg/root/6.10.08/include/
 
 #when compiling on vocms
+LIBS += -L/cvmfs/cms.cern.ch/slc6_amd64_gcc630/lcg/root/6.10.08/lib -lGui -lCore -lImt -lRIO -lNet \
+        -lHist -lGraf -lGraf3d -lGpad -lTree -lTreePlayer \
+        -lRint -lPostscript -lMatrix -lPhysics \
+        -lMathCore -lThread -lMultiProc \
+	-lpthread \
+	-lm -ldl 
 
 #when developing locally and libraries are installed
-LIBS     += -L/usr/local/lib -lGui -lCore -lImt -lRIO -lNet \
-            -lHist -lGraf -lGraf3d -lGpad -lTree -lTreePlayer \
-            -lRint -lPostscript -lMatrix -lPhysics \
-            -lMathCore -lThread -lMultiProc -pthread -lm -ldl -rdynamic
+#LIBS     += -L/usr/local/lib -lGui -lCore -lImt -lRIO -lNet \
+#            -lHist -lGraf -lGraf3d -lGpad -lTree -lTreePlayer \
+#            -lRint -lPostscript -lMatrix -lPhysics \
+#            -lMathCore -lThread -lMultiProc -pthread -lm -ldl -rdynamic
 
 
 

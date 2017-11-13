@@ -34,9 +34,9 @@ DQMFileDownloader::~DQMFileDownloader()
 
 bool DQMFileDownloader::download_tfile_from_url(QString download_path, QString url)
 {
-    TFile* f = TFile::Open(url.toStdString().c_str());
+    TFile* f = TFile::Open(url.toUtf8().constData());
     if(f) {
-        f->Cp(download_path.toStdString().c_str());
+        f->Cp(download_path.toUtf8().constData());
         f->Close();
     }
 
@@ -61,8 +61,8 @@ void DQMFileDownloader::setupCertificates()
     auto& instance =  SettingsManager::getInstance();
     QString cert = instance.getSetting(SETTING::USER_CERTIFICATE_PATH);
     QString key = instance.getSetting(SETTING::USER_KEY_PATH);
-    gEnv->SetValue("Davix.GSI.UserCert", cert.toStdString().c_str());
-    gEnv->SetValue("Davix.GSI.UserKey", key.toStdString().c_str());
+    gEnv->SetValue("Davix.GSI.UserCert", cert.toUtf8().constData());
+    gEnv->SetValue("Davix.GSI.UserKey", key.toUtf8().constData());
     gEnv->SetValue("Davix.GSI.GridMode", true);
     gEnv->SetValue("Davix.GSI.CACheck", false);
 }

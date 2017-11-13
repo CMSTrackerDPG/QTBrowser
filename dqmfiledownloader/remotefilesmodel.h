@@ -2,7 +2,7 @@
 #define REMOTEFILESMODEL_H
 
 #include <QAbstractListModel>
-
+#include <vector>
 #include "filecontainer.h"
 
 class RemoteFilesModel : public QAbstractListModel
