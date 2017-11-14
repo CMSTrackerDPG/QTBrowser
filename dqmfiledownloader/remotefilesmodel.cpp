@@ -10,7 +10,7 @@ RemoteFilesModel::RemoteFilesModel(QObject* parent)
     this->parent = parent;
 }
 
-void RemoteFilesModel::fill_model_from_file(QString path)
+void RemoteFilesModel::fillModelFromFile(QString path)
 {
     QFile file(path);
     file.open(QIODevice::ReadOnly | QIODevice::Text);
@@ -24,24 +24,77 @@ void RemoteFilesModel::fill_model_from_file(QString path)
         QString path = in.readLine();
         auto tmp = path.lastIndexOf("/");
         QString display_name = path.mid(tmp+1);
-        remote_files.push_back(FileContainer(display_name, path));
+        m_remoteFiles.push_back(FileContainer(display_name, path));
     }
 
 }
 
-int RemoteFilesModel::rowCount(const QModelIndex& parent) const
+bool RemoteFilesModel::canFetchMore(const QModelIndex& /*parent*/) const
 {
-    return remote_files.size();
+#if QT_VERSION >= 0x050000
+    if (m_fileCount < m_remoteFiles.size())
+        return true;
+    else
+        return false;
+#else
+    return false;
+#endif
+}
+
+void RemoteFilesModel::fetchMore(const QModelIndex& /*parent*/)
+{
+#if QT_VERSION >= 0x050000
+
+    int remainder = m_remoteFiles.size() - m_fileCount;
+    int items_to_fetch = qMin(2000, remainder);
+
+    beginInsertRows(QModelIndex(), m_fileCount, m_fileCount+items_to_fetch-1);
+
+    m_fileCount += items_to_fetch;
+
+    endInsertRows();
+
+    emit numberPopulated(items_to_fetch);
+#else
+#endif
+}
+
+int RemoteFilesModel::rowCount(const QModelIndex& /*parent*/) const
+{
+    // Lazy loading of the model
+    // when trying to display a large amount of files
+    // the application takes WAY too long(1.5k entries ~1minute).
+    // This only occurs in qt4 for some reason.
+
+    //TODO:
+    // a downside to this is that filtering with a proxy model
+    // only filters the currently loaded entries. Which makes a
+    // search function in a non fully loaded model very pointless.
+    // Solution: *)could be to implement fetchMore in a proxy model
+    //           *)write a manual filter that goes over vector comparing
+    //             elements and then creating a model from them.
+#if QT_VERSION >= 0x050000
+    return m_remoteFiles.size();
+#else
+    return m_fileCount;
+#endif
 }
 
 QVariant RemoteFilesModel::data(const QModelIndex& index, int role) const
 {
+    if (!index.isValid())
+        return QVariant();
+
+    if (index.row() >= m_remoteFiles.size() || index.row() < 0)
+        return QVariant();
+
+
     int row = index.row();
     if(role == Qt::DisplayRole) {
-        return remote_files[row].getName();
+        return m_remoteFiles[row].getName();
     }
     if(role == Qt::ToolTipRole) {
-        return remote_files[row].getPath();
+        return m_remoteFiles[row].getPath();
     }
 
     return QVariant();
@@ -50,5 +103,5 @@ QVariant RemoteFilesModel::data(const QModelIndex& index, int role) const
 QString RemoteFilesModel::getFilepath(const QModelIndex& index) const
 {
     int row = index.row();
-    return remote_files[row].getPath();
+    return m_remoteFiles[row].getPath();
 }

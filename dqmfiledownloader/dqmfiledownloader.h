@@ -30,15 +30,17 @@ private slots:
 
     void on_pushButton_2_clicked();
 
+    void on_comboBox_currentIndexChanged(const QString &dropdowntext);
+
 private:
     void setupCertificates();
     bool isValidSettings();
 
     Ui::DQMFileDownloader *ui;
-    RemoteFilesModel      *ONLINE_remote_files_model;
-//    TODO: Maybe?
-//    RemoteFilesModel      *OFFLINE_remote_files_model;
-//    RemoteFilesModel      *RELVAL_remote_files_model;
+    RemoteFilesModel      *ONLINE_remote_files_model  = nullptr;
+    RemoteFilesModel      *OFFLINE_remote_files_model = nullptr;
+    RemoteFilesModel      *RELVAL_remote_files_model  = nullptr;
+    RemoteFilesModel      *current_model = nullptr;
 
     QSortFilterProxyModel *proxy_remote_files_model;
 };
