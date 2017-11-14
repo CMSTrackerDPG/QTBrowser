@@ -142,15 +142,15 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>DQMFileDownloader</class>
+   <class>TFileTreeViewer</class>
    <extends>QWidget</extends>
-   <header>dqmfiledownloader/dqmfiledownloader.h</header>
+   <header>tfiletreeviewer.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>TFileTreeViewer</class>
+   <class>DQMFileDownloader</class>
    <extends>QWidget</extends>
-   <header>tfiletreeviewer/tfiletreeviewer.h</header>
+   <header>dqmfiledownloader.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

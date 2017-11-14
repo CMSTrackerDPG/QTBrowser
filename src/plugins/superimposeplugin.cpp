@@ -1,4 +1,4 @@
-#include "superimposeplugin.h"
+#include "plugins/superimposeplugin.h"
 #include "ui_superimposeplugin.h"
 
 #include <QDebug>
@@ -9,7 +9,7 @@
 #include <QFileDialog>
 
 #include <TDirectoryFile.h>
-#include "tobjectcontainer.h"
+#include "container/tobjectcontainer.h"
 
 SuperimposePlugin::SuperimposePlugin(QWidget *parent) :
     QWidget(parent),

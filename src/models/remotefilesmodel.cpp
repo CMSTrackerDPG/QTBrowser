@@ -3,7 +3,7 @@
 #include <QDebug>
 #include <QDir>
 
-#include "remotefilesmodel.h"
+#include "models/remotefilesmodel.h"
 
 RemoteFilesModel::RemoteFilesModel(QObject* parent)
 {

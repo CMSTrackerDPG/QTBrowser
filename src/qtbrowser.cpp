@@ -10,12 +10,11 @@
 #include <TH3.h>
 #include <TH2.h>
 
-#include "tobjectcontainer.h"
+#include "dqmfiledownloader.h"
 #include "previewqrootcanvas.h"
+#include "container/tobjectcontainer.h"
 #include "settings/settingsmanager.h"
-
 #include "settings/settingsdialog.h"
-#include "dqmfiledownloader/dqmfiledownloader.h"
 #include "plugins/superimposeplugin.h"
 #include "plugins/concatinateplugin.h"
 
@@ -36,10 +35,16 @@ QTBrowser::QTBrowser(QWidget *parent) :
 
 QTBrowser::~QTBrowser()
 {
-    //FIXME: something from ROOT causes segfaults at program exit
-    rootapp->Terminate(0);
     delete ui;
-    delete rootapp;
+
+//   -------------- ROOT cleanup --------------
+// Note: Cleaning up properly causes ROOT to segfault
+// https://root-forum.cern.ch/t/break-segmentation-fault-after-quitting-the-canvas/21627
+// >This is a long-standing problem in ROOT(and nobody cares).
+
+//    rootapp->Terminate(0);
+//    delete rootapp;
+//    rootapp=nullptr;
 }
 
 void QTBrowser::on_finishedDownloadFile(QString file_path)

@@ -14,10 +14,9 @@
 #include <TH2.h>
 #include <TClass.h>
 
-#include "tobjectcontainer.h"
 #include "previewqrootcanvas.h"
+#include "container/tobjectcontainer.h"
 #include "settings/settingsmanager.h"
-
 
 TFileTreeViewer::TFileTreeViewer(QWidget *parent) :
     QWidget(parent),
@@ -33,8 +32,6 @@ TFileTreeViewer::TFileTreeViewer(QWidget *parent) :
     proxy_model->setSourceModel(model);
 
     ui->treeView->setModel(proxy_model);
-
-//    addTFileToTree("/home/fil/projects/dqmPlotter/f1.root");
 }
 
 TFileTreeViewer::~TFileTreeViewer()

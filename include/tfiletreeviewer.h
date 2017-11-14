@@ -5,8 +5,8 @@
 #include <QStandardItemModel>
 #include <TKey.h>
 
-#include "tfiletreeviewer/leafsortfilterproxymodel.h"
-#include "tobjectcontainer.h"
+#include "models/leafsortfilterproxymodel.h"
+#include "container/tobjectcontainer.h"
 
 namespace Ui {
 class TFileTreeViewer;

@@ -1,4 +1,4 @@
-#include "settingsmanager.h"
+#include "settings/settingsmanager.h"
 #include <QDebug>
 
 SettingsManager* SettingsManager::instance_ = nullptr;

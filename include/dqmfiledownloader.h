@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QSortFilterProxyModel>
 
-#include "remotefilesmodel.h"
+#include "models/remotefilesmodel.h"
 
 namespace Ui {
 class DQMFileDownloader;

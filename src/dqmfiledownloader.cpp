@@ -6,10 +6,10 @@
 #include <TEnv.h>
 #include <TFile.h>
 
-#include "dqmfiledownloader.h"
+#include "include/dqmfiledownloader.h"
 #include "ui_dqmfiledownloader.h"
-#include "settings/settingsdialog.h"
-#include "settings/settingsmanager.h"
+#include "include/settings/settingsdialog.h"
+#include "include/settings/settingsmanager.h"
 
 DQMFileDownloader::DQMFileDownloader(QWidget *parent) :
     QWidget(parent),

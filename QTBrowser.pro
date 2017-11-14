@@ -14,41 +14,45 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += console
 
-SOURCES += main.cpp\
-    qrootcanvas.cpp \
-    qtbrowser.cpp \
-    settings/settingsdialog.cpp \
-    settings/settingsmanager.cpp \
-    dqmfiledownloader/dqmfiledownloader.cpp \
-    dqmfiledownloader/remotefilesmodel.cpp \
-    plugins/superimposeplugin.cpp \
-    plugins/concatinateplugin.cpp \
-    tfiletreeviewer/tfiletreeviewer.cpp
+SOURCES += \
+    src/dqmfiledownloader.cpp \
+    src/main.cpp              \
+    src/qrootcanvas.cpp       \
+    src/qtbrowser.cpp         \
+    src/tfiletreeviewer.cpp   \
+    src/models/remotefilesmodel.cpp   \
+    src/plugins/concatinateplugin.cpp \
+    src/plugins/superimposeplugin.cpp \
+    src/settings/settingsdialog.cpp   \
+    src/settings/settingsmanager.cpp  \
 
 HEADERS  += \
-    qtbrowser.h \
-    qrootcanvas.h \
-    tobjectcontainer.h \
-    previewqrootcanvas.h \
-    settings/settingsdialog.h \
-    settings/settingsmanager.h \
-    dqmfiledownloader/dqmfiledownloader.h \
-    dqmfiledownloader/filecontainer.h \
-    dqmfiledownloader/remotefilesmodel.h \
-    plugins/iplugin.h \
-    plugins/superimposeplugin.h \
-    plugins/concatinateplugin.h \
-    tfiletreeviewer/tfiletreeviewer.h \
-    tfiletreeviewer/leafsortfilterproxymodel.h \
+    include/dqmfiledownloader.h \
+    include/previewqrootcanvas.h\
+    include/qrootcanvas.h       \
+    include/qtbrowser.h         \
+    include/tfiletreeviewer.h   \
+    include/container/filecontainer.h    \
+    include/container/tobjectcontainer.h \
+    include/models/leafsortfilterproxymodel.h \
+    include/models/remotefilesmodel.h         \
+    include/plugins/concatinateplugin.h  \
+    include/plugins/iplugin.h            \
+    include/plugins/superimposeplugin.h  \
+    include/settings/settingsdialog.h  \
+    include/settings/settingsmanager.h \
+
 
 FORMS    += \
-    previewqrootcanvas.ui \
-    qtbrowser.ui \
-    settings/settingsdialog.ui \
-    dqmfiledownloader/dqmfiledownloader.ui \
-    plugins/superimposeplugin.ui \
-    plugins/concatinateplugin.ui \
-    tfiletreeviewer/tfiletreeviewer.ui
+    form/concatinateplugin.ui  \
+    form/dqmfiledownloader.ui  \
+    form/previewqrootcanvas.ui \
+    form/qtbrowser.ui          \
+    form/settingsdialog.ui     \
+    form/superimposeplugin.ui  \
+    form/tfiletreeviewer.ui    \
+
+INCLUDEPATH += $$PWD/include
 
 #when compiling on vocms
 #INCLUDEPATH += /cvmfs/cms.cern.ch/slc6_amd64_gcc630/lcg/root/6.10.08/include/

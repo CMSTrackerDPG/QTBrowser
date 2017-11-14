@@ -9,8 +9,8 @@
 #include <TApplication.h>
 
 #include "plugins/iplugin.h"
-#include "tfiletreeviewer/tfiletreeviewer.h"
-#include "dqmfiledownloader/dqmfiledownloader.h"
+#include "tfiletreeviewer.h"
+#include "dqmfiledownloader.h"
 
 namespace Ui {
 class QTBrowser;

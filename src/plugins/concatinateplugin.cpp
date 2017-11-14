@@ -1,4 +1,4 @@
-#include "concatinateplugin.h"
+#include "plugins/concatinateplugin.h"
 #include "ui_concatinateplugin.h"
 
 #include <QDebug>
