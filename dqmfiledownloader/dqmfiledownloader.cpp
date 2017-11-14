@@ -122,9 +122,7 @@ void DQMFileDownloader::on_pushButton_2_clicked()
     setupCertificates();
 
     auto& sm = SettingsManager::getInstance();
-    QString download_base_path = QFileDialog::getExistingDirectory(this, tr("Select"), sm.getSetting(SETTING::DOWNLOAD_PATH));
-
-    if(!download_base_path.compare("")) return;
+    QString download_base_path = "data/downloads";
 
     sm.writeSettings(SETTING::DOWNLOAD_PATH, download_base_path);
 

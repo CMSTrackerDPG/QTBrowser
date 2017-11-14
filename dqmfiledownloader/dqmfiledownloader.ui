@@ -84,7 +84,7 @@
      <item>
       <widget class="QPushButton" name="pushButton">
        <property name="text">
-        <string>Download</string>
+        <string>Download (Save As)</string>
        </property>
       </widget>
      </item>
