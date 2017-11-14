@@ -32,19 +32,19 @@ void RemoteFilesModel::fillModelFromFile(QString path)
 bool RemoteFilesModel::canFetchMore(const QModelIndex& /*parent*/) const
 {
 #if QT_VERSION >= 0x050000
+    return false;
+#else
     if (m_fileCount < m_remoteFiles.size())
         return true;
     else
         return false;
-#else
-    return false;
 #endif
 }
 
 void RemoteFilesModel::fetchMore(const QModelIndex& /*parent*/)
 {
 #if QT_VERSION >= 0x050000
-
+#else
     int remainder = m_remoteFiles.size() - m_fileCount;
     int items_to_fetch = qMin(2000, remainder);
 
@@ -55,7 +55,6 @@ void RemoteFilesModel::fetchMore(const QModelIndex& /*parent*/)
     endInsertRows();
 
     emit numberPopulated(items_to_fetch);
-#else
 #endif
 }
 

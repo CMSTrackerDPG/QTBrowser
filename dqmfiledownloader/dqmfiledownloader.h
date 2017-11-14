@@ -17,7 +17,7 @@ public:
     DQMFileDownloader(QWidget *parent = 0);
     ~DQMFileDownloader();
 
-    bool download_tfile_from_url(QString name, QString url);
+    bool downloadTFileFromUrl(QString name, QString url);
 
 signals:
     void on_finishedDownloadFile(QString file_path);
@@ -27,9 +27,7 @@ private slots:
     void on_listView_doubleClicked(const QModelIndex &index);
     void on_actionPreferences_triggered();
     void on_lineEdit_returnPressed();
-
     void on_pushButton_2_clicked();
-
     void on_comboBox_currentIndexChanged(const QString &dropdowntext);
 
 private:

@@ -38,7 +38,7 @@ private:
     }();
 
 
-    const QString settings_file_path = "./settings.ini";
+    const QString settings_file_path = "data/settings.ini";
 };
 
 #endif // SETTINGSMANAGER_H
