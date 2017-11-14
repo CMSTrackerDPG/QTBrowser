@@ -101,10 +101,5 @@ void QTBrowser::on_actionConcatinate_triggered()
 
 void QTBrowser::on_actionUpdate_Online_Index_triggered()
 {
-    system("/home/fil/projects/build-QTBrowser-Desktop-Debug/CrawlerDqmGui "
-           "update online data/online.txt "
-           "cert=/home/fil/Documents/usercert.pem "
-           "key=/home/fil/Documents/userkey.pem");
 
-    //TODO: notify the downloader to reload the model
 }

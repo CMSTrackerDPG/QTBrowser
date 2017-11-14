@@ -8,14 +8,24 @@
 
 #include "include/dqmfiledownloader.h"
 #include "ui_dqmfiledownloader.h"
-#include "include/settings/settingsdialog.h"
-#include "include/settings/settingsmanager.h"
+#include "settings/settingsdialog.h"
+#include "settings/settingsmanager.h"
 
 DQMFileDownloader::DQMFileDownloader(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::DQMFileDownloader)
 {
     ui->setupUi(this);
+
+    ONLINE_remote_files_model = new RemoteFilesModel(this);
+    ONLINE_remote_files_model->fillModelFromFile("data/online.txt");
+    current_model = ONLINE_remote_files_model;
+
+    proxy_remote_files_model = new QSortFilterProxyModel(this);
+    proxy_remote_files_model->setSourceModel(current_model);
+
+    ui->listView->setModel(proxy_remote_files_model);
+    ui->listView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 }
 
 DQMFileDownloader::~DQMFileDownloader()
@@ -25,9 +35,9 @@ DQMFileDownloader::~DQMFileDownloader()
 
 bool DQMFileDownloader::downloadTFileFromUrl(QString download_path, QString url)
 {
-    TFile* f = TFile::Open(url.toUtf8().constData());
+    TFile* f = TFile::Open(url.toStdString().c_str());
     if(f) {
-        f->Cp(download_path.toUtf8().constData());
+        f->Cp(download_path.toStdString().c_str());
         f->Close();
     }
     return f;
@@ -58,16 +68,8 @@ void DQMFileDownloader::setupCertificates()
 
 bool DQMFileDownloader::isValidSettings()
 {
-    auto& inst = SettingsManager::getInstance();
-
-    //TODO: this is garbage
-//    bool is_settings_set = inst.getSetting(SETTING::USER_CERTIFICATE_PATH).compare("") &&
-//                           inst.getSetting(SETTING::USER_KEY_PATH).compare("");
-
-//    bool is_valid_cert_key; // TODO: find resource on server that can be used to verify
-//                            //       if the certificate+key are valid
-
-//    return is_settings_set;
+    auto sm = SettingsManager::getInstance();
+    //TODO: figure out how to check if the fucking settings are valid;
     return true;
 }
 
@@ -76,7 +78,6 @@ void DQMFileDownloader::on_lineEdit_returnPressed()
     QString filter = ui->lineEdit->text();
     proxy_remote_files_model->setFilterRegExp(filter);
 }
-
 
 // DOWNLOAD ONLY
 void DQMFileDownloader::on_pushButton_clicked()
@@ -94,17 +95,22 @@ void DQMFileDownloader::on_pushButton_clicked()
     auto& sm = SettingsManager::getInstance();
     QString download_base_path = QFileDialog::getExistingDirectory(this, tr("Select"), sm.getSetting(SETTING::DOWNLOAD_PATH));
 
-    if(!download_base_path.compare("")) return;
+    if(download_base_path=="") return;
 
-    sm.writeSettings(SETTING::DOWNLOAD_PATH, download_base_path);
+    qDebug() << download_base_path;
 
-    for(auto& e : ui->listView->selectionModel()->selectedIndexes()) {
+    for(auto& e : ui->listView->selectionModel()->selectedIndexes()){
+
         auto real_idx = proxy_remote_files_model->mapToSource(e);
         QString name = current_model->data(real_idx, Qt::DisplayRole).toString();
         QString url  = current_model->getFilepath(real_idx);
+        qDebug() << 3;
+
         QString download_path =  download_base_path + "/" + name;
         downloadTFileFromUrl(download_path, url);
+        qDebug() << 4;
     }
+
 }
 
 
@@ -126,7 +132,8 @@ void DQMFileDownloader::on_pushButton_2_clicked()
 
     sm.writeSettings(SETTING::DOWNLOAD_PATH, download_base_path);
 
-    for(auto& e : ui->listView->selectionModel()->selectedIndexes()) {
+    for(auto& e : ui->listView->selectionModel()->selectedIndexes()){
+
         auto real_idx = proxy_remote_files_model->mapToSource(e);
         QString name = current_model->data(real_idx, Qt::DisplayRole).toString();
         QString url  = current_model->getFilepath(real_idx);
@@ -141,32 +148,31 @@ void DQMFileDownloader::on_pushButton_2_clicked()
 
 void DQMFileDownloader::on_comboBox_currentIndexChanged(const QString& dropdowntext)
 {
-    if(!dropdowntext.compare("Online")) {
+    if(dropdowntext == "Online") {
         if(!ONLINE_remote_files_model) {
             ONLINE_remote_files_model = new RemoteFilesModel(this);
             ONLINE_remote_files_model->fillModelFromFile("data/online.txt");
         }
         current_model = ONLINE_remote_files_model;
 
-    } else if(!dropdowntext.compare("Relval")) {
+    } else if(dropdowntext == "Offline") {
+        if(!OFFLINE_remote_files_model) {
+            OFFLINE_remote_files_model = new RemoteFilesModel(this);
+            OFFLINE_remote_files_model->fillModelFromFile("data/offline.txt");
+        }
+        current_model = OFFLINE_remote_files_model;
+
+    } else if(dropdowntext == "Relval") {
         if(!RELVAL_remote_files_model) {
             RELVAL_remote_files_model = new RemoteFilesModel(this);
             RELVAL_remote_files_model->fillModelFromFile("data/relval.txt");
         }
-
         current_model = RELVAL_remote_files_model;
-
-    } else if(!dropdowntext.compare("Offline")) {
-        qDebug() << "Too bad, not supported";
     } else {
-        qDebug() << "[BUG] DQMFileDownloader::on_comboBox_currentIndexChanged How did you manage to get here";
+        qDebug() << "[BUG] DQMFileDownloader::on_comboBox_currentIndexChanged This should not happen";
     }
 
-    if(current_model) {
-        proxy_remote_files_model = new QSortFilterProxyModel(this);
-        proxy_remote_files_model->setSourceModel(current_model);
-
-        ui->listView->setModel(proxy_remote_files_model);
-        ui->listView->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    }
+    proxy_remote_files_model->setSourceModel(current_model);
+    ui->listView->setModel(proxy_remote_files_model);
+    ui->listView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 }

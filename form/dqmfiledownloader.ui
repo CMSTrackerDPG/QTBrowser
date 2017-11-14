@@ -20,11 +20,6 @@
       <widget class="QComboBox" name="comboBox">
        <item>
         <property name="text">
-         <string>Choose Flavor</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
          <string>Online</string>
         </property>
        </item>

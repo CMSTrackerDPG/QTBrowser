@@ -16,7 +16,6 @@ class DQMFileDownloader : public QWidget
 public:
     DQMFileDownloader(QWidget *parent = 0);
     ~DQMFileDownloader();
-
     bool downloadTFileFromUrl(QString name, QString url);
 
 signals:
@@ -38,7 +37,7 @@ private:
     RemoteFilesModel      *ONLINE_remote_files_model  = nullptr;
     RemoteFilesModel      *OFFLINE_remote_files_model = nullptr;
     RemoteFilesModel      *RELVAL_remote_files_model  = nullptr;
-    RemoteFilesModel      *current_model = nullptr;
+    RemoteFilesModel      *current_model              = nullptr;
 
     QSortFilterProxyModel *proxy_remote_files_model;
 };
