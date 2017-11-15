@@ -1,4 +1,5 @@
 #include "qrootcanvas.h"
+#include <memory>
 
 #include <QTimer>
 #include <QPaintEvent>
@@ -63,7 +64,16 @@ void QRootCanvas::clear()
     canvas->Clear();
 }
 
-void QRootCanvas::superimpose(std::vector<TH1*> plots, std::string title)
+
+void QRootCanvas::superimpose(std::vector<TH1*> plots, std::string title, bool is_multiaxis)
+{
+    if(is_multiaxis)
+        superimpose_with_multiaxis(plots, title);
+    else
+        superimpose_without_multiaxis(plots, title);
+}
+
+void QRootCanvas::superimpose_without_multiaxis(std::vector<TH1*> plots, std::string title)
 {
     canvas->cd();
     canvas->Clear();
@@ -93,13 +103,9 @@ void QRootCanvas::superimpose(std::vector<TH1*> plots, std::string title)
     canvas->Update();
 }
 
-void QRootCanvas::superimpose_multiaxis(std::vector<TH1*> plots, std::string title)
+void QRootCanvas::superimpose_with_multiaxis(std::vector<TH1*> plots, std::string title)
 {
     canvas->cd();
-    // TODO: works alright but its nasty as fuck; relies on non obvious ordering
-    //   -IDEA: instead of plotting the largest Xaxis plot seperatly, swap in in the
-    //          vector to the first place (plots[0]) and then loop over all the plots
-    //          and just have a special case there.
 
     std::vector<Int_t> basic_colors = { kRed, kCyan+1, kMagenta, kGreen, kBlue };
     std::vector<Int_t> colors;
@@ -196,20 +202,19 @@ void QRootCanvas::concatinatePlots(std::vector<TH1*> plots, std::string title)
         total_bins  += plot->FindLastBinAbove(0.);
     }
 
-    // FIXME: producing memory leak here
-    auto* merged = new TH1F("",title.c_str(), total_bins, 0, total_range);
+    auto merged(TH1F("",title.c_str(), total_bins, 0, total_range));
 
     int offset = 0;
     for(auto& plot : plots) {
         int last_idx = plot->FindLastBinAbove(0.);
 
         for(int bin = 0; bin<last_idx; bin++) {
-            merged->SetBinContent(bin+offset, plot->GetBinContent(bin));
+            merged.SetBinContent(bin+offset, plot->GetBinContent(bin));
         }
         offset += last_idx;
     }
     canvas->cd();
-    merged->Draw();
+    merged.Clone()->Draw();
 }
 
 void QRootCanvas::saveAs(std::string filename)

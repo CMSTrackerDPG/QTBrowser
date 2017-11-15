@@ -65,7 +65,7 @@ int RemoteFilesModel::rowCount(const QModelIndex& /*parent*/) const
     // the application takes WAY too long(1.5k entries ~1minute).
     // This only occurs in qt4 for some reason.
 
-    //TODO:
+    //TODO: search all files in dqmdownloader(qt4)
     // a downside to this is that filtering with a proxy model
     // only filters the currently loaded entries. Which makes a
     // search function in a non fully loaded model very pointless.

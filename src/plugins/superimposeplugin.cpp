@@ -76,10 +76,7 @@ void SuperimposePlugin::superimposeCheckedItems()
 
     if(!plots.size()) return;
 
-    if(is_multiaxis_enable)
-        ui->superimpose_canvas->superimpose_multiaxis(plots, std::string(plot_title.toUtf8().constData()));
-    else
-        ui->superimpose_canvas->superimpose(plots, std::string(plot_title.toUtf8().constData()));
+    ui->superimpose_canvas->superimpose(plots, std::string(plot_title.toUtf8().constData()), is_multiaxis_enable);
 }
 
 void SuperimposePlugin::on_listWidget_itemChanged(QListWidgetItem* /*item*/)

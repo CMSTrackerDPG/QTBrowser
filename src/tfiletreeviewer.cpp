@@ -39,15 +39,12 @@ TFileTreeViewer::~TFileTreeViewer()
     delete ui;
 }
 
-
-//TODO: not used
 // removes the idx item and its children.
 void TFileTreeViewer::removeTreeItem(QModelIndex idx) {
     proxy_model->removeColumn(0, idx);
     proxy_model->removeRow(idx.row(), idx.parent());
 }
 
-//TODO: not used
 void TFileTreeViewer::previewItem(QModelIndex idx)
 {
     TObjectContainer* o = idx.data(Qt::UserRole + 1).value<TObjectContainer*>();
@@ -102,11 +99,10 @@ void TFileTreeViewer::addTFileToTree(QString file_path){
     QStandardItem* parent_item = new QStandardItem(file_path);
 
     for (auto i : *(f->GetListOfKeys())) {
-        // TODO: file_path is just being passed in visit
-        //       so that a tooltip for the current file showing
-        //       sohwing the filename+currentpath in the file
-        //       can be displayed in the plugins
-        //       This can probably be done more elegantly.
+        // file_path is just being passed in visit
+        // so that a tooltip for the current file showing
+        // sohwing the filename+currentpath in the file
+        // can be displayed in the plugins
         visit(((TKey*)i), "", parent_item, file_path);
     }
 

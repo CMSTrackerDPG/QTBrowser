@@ -30,11 +30,8 @@ private slots:
     void on_treeView_doubleClicked(const QModelIndex &index);
     void on_filterLineEdit_returnPressed();
     void on_pushButton_clicked();
-
     void on_pushButton_3_clicked();
-
     void on_pushButton_2_clicked();
-
     void on_pushButton_4_clicked();
 
 private:

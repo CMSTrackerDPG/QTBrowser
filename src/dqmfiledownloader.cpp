@@ -57,7 +57,7 @@ void DQMFileDownloader::on_actionPreferences_triggered()
 
 void DQMFileDownloader::setupCertificates()
 {
-    auto& instance =  SettingsManager::getInstance();
+    auto instance =  SettingsManager::getInstance();
     QString cert = instance.getSetting(SETTING::USER_CERTIFICATE_PATH);
     QString key = instance.getSetting(SETTING::USER_KEY_PATH);
     gEnv->SetValue("Davix.GSI.UserCert", cert.toUtf8().constData());
@@ -68,9 +68,16 @@ void DQMFileDownloader::setupCertificates()
 
 bool DQMFileDownloader::isValidSettings()
 {
-    auto sm = SettingsManager::getInstance();
-    //TODO: figure out how to check if the fucking settings are valid;
-    return true;
+    setupCertificates();
+    //todo: this is a random file. Replace this with a CURL query with the certificate/key set to
+    //      check if the settings are really valid
+    TFile* f = TFile::Open("https://cmsweb.cern.ch/dqm/online/data/browse/Original/00030xxxx/0003060xx/DQM_V0001_TrackingHLTBeamspotStream_R000306029.root");
+    if(!f) {
+        QMessageBox::information(this, tr("DQMFileDownloader"),
+                                tr("Settings are not valid! (File->Settings)") );
+    }
+
+    return f;
 }
 
 void DQMFileDownloader::on_lineEdit_returnPressed()
@@ -83,12 +90,8 @@ void DQMFileDownloader::on_lineEdit_returnPressed()
 void DQMFileDownloader::on_pushButton_clicked()
 {
     //todo: extract function
-    if(!isValidSettings()){
-        QMessageBox::information(this,
-                                 tr("DQMFileDownloader"),
-                                 tr("Settings are not valid! (Edit->Settings)") );
-        return;
-    }
+    if(!isValidSettings()) return;
+
 
     setupCertificates();
 
@@ -117,13 +120,7 @@ void DQMFileDownloader::on_pushButton_clicked()
 // DOWNLOAD AND OPEN IN TREEVIEW
 void DQMFileDownloader::on_pushButton_2_clicked()
 {
-    //todo: extract function
-    if(!isValidSettings()){
-        QMessageBox::information(this,
-                                 tr("DQMFileDownloader"),
-                                 tr("Settings are not valid! (Edit->Settings)") );
-        return;
-    }
+    if(!isValidSettings()) return;
 
     setupCertificates();
 

@@ -26,10 +26,7 @@ public:
     void clear();
     void saveAs(std::string filename);
 
-    //TODO: maybe make superimpse/_mutliaxis into one function that has a bool multiaxis param
-    void superimpose(std::vector<TH1*> plots, std::string title = "");
-    void superimpose_multiaxis(std::vector<TH1*> plots, std::string title = "");
-
+    void superimpose(std::vector<TH1*> plots, std::string title = "", bool is_multiaxis=false);
     void concatinatePlots(std::vector<TH1*> plots, std::string title = "");
 
 public slots:
@@ -44,6 +41,10 @@ protected:
 
     TCanvas* canvas;
     QTimer*  root_timer;
+
+private:
+    void superimpose_with_multiaxis(std::vector<TH1*> plots, std::string title = "");
+    void superimpose_without_multiaxis(std::vector<TH1*> plots, std::string title);
 };
 
 
