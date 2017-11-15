@@ -35,9 +35,9 @@ DQMFileDownloader::~DQMFileDownloader()
 
 bool DQMFileDownloader::downloadTFileFromUrl(QString download_path, QString url)
 {
-    TFile* f = TFile::Open(url.toStdString().c_str());
+    TFile* f = TFile::Open(url.toUtf8().constData());
     if(f) {
-        f->Cp(download_path.toStdString().c_str());
+        f->Cp(download_path.toUtf8().constData());
         f->Close();
     }
     return f;
@@ -175,4 +175,9 @@ void DQMFileDownloader::on_comboBox_currentIndexChanged(const QString& dropdownt
     proxy_remote_files_model->setSourceModel(current_model);
     ui->listView->setModel(proxy_remote_files_model);
     ui->listView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+}
+
+void DQMFileDownloader::on_pushButton_3_clicked()
+{
+   on_lineEdit_returnPressed();
 }

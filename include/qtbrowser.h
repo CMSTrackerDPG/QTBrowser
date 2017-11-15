@@ -32,8 +32,6 @@ private slots:
     void on_actionSuperimpose_triggered();
     void on_actionConcatinate_triggered();
 
-    void on_actionUpdate_Online_Index_triggered();
-
 private:
     void addPlugin(QString name);
     void removeActivePlugin();

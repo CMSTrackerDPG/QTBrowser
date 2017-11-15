@@ -71,9 +71,6 @@
     <property name="title">
      <string>Fi&amp;le</string>
     </property>
-    <addaction name="actionUpdate_Online_Index"/>
-    <addaction name="actionUpate_Offline_Index"/>
-    <addaction name="actionUpdate_Relval_Index"/>
     <addaction name="actionSettings"/>
    </widget>
    <widget class="QMenu" name="menuPlugins">

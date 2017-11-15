@@ -6,6 +6,7 @@ TARGET = QTBrowser
 TEMPLATE = app
 
 DEFINES += QT_DEPRECATED_WARNINGS
+#DEFINES += ON_VOCMS
 
 # You can also make your code fail to compile if you use deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -54,24 +55,19 @@ FORMS    += \
 
 INCLUDEPATH += $$PWD/include
 
+contains(DEFINES, ON_VOCMS) {
 #  ------------------------- VOCMS -------------------------
-#
-#INCLUDEPATH += /cvmfs/cms.cern.ch/slc6_amd64_gcc630/lcg/root/6.10.08/include/
-#LIBS += -L/cvmfs/cms.cern.ch/slc6_amd64_gcc630/lcg/root/6.10.08/lib -lGui -lCore -lImt -lRIO -lNet \
-#        -lHist -lGraf -lGraf3d -lGpad -lTree -lTreePlayer \
-#        -lRint -lPostscript -lMatrix -lPhysics \
-#        -lMathCore -lThread -lMultiProc \
-#        -lpthread \
-#	 -lm -ldl
-#
-#
+INCLUDEPATH += /cvmfs/cms.cern.ch/slc6_amd64_gcc630/lcg/root/6.10.08/include/
+LIBS += -L/cvmfs/cms.cern.ch/slc6_amd64_gcc630/lcg/root/6.10.08/lib -lGui -lCore -lImt -lRIO -lNet \
+        -lHist -lGraf -lGraf3d -lGpad -lTree -lTreePlayer \
+        -lRint -lPostscript -lMatrix -lPhysics \
+        -lMathCore -lThread -lMultiProc \
+        -lpthread \
+         -lm -ldl
+} else {
 #  ------------------------- LOCALLY -------------------------
-#when developing locally and libraries are installed
 LIBS     += -L/usr/local/lib -lGui -lCore -lImt -lRIO -lNet \
             -lHist -lGraf -lGraf3d -lGpad -lTree -lTreePlayer \
             -lRint -lPostscript -lMatrix -lPhysics \
             -lMathCore -lThread -lMultiProc -pthread -lm -ldl
-
-
-
-
+}

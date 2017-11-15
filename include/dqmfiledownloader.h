@@ -28,6 +28,7 @@ private slots:
     void on_lineEdit_returnPressed();
     void on_pushButton_2_clicked();
     void on_comboBox_currentIndexChanged(const QString &dropdowntext);
+    void on_pushButton_3_clicked();
 
 private:
     void setupCertificates();

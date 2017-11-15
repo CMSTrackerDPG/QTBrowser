@@ -98,8 +98,3 @@ void QTBrowser::on_actionConcatinate_triggered()
 {
     addPlugin("Concatinate");
 }
-
-void QTBrowser::on_actionUpdate_Online_Index_triggered()
-{
-
-}
