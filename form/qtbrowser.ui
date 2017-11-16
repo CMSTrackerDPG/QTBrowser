@@ -79,6 +79,7 @@
     </property>
     <addaction name="actionConcatinate"/>
     <addaction name="actionFit"/>
+    <addaction name="actionPreview"/>
     <addaction name="actionSuperimpose"/>
     <addaction name="separator"/>
     <addaction name="actionAbout_Plugins"/>
@@ -139,6 +140,11 @@
   <action name="actionFit">
    <property name="text">
     <string>Fit</string>
+   </property>
+  </action>
+  <action name="actionPreview">
+   <property name="text">
+    <string>Preview</string>
    </property>
   </action>
  </widget>

@@ -98,6 +98,11 @@ void TFileTreeViewer::on_pushButton_clicked()
 void TFileTreeViewer::addTFileToTree(QString file_path){
     TFile* f = TFile::Open(file_path.toUtf8().constData());
 
+    if(!f) {
+        qDebug() << "TFileTreeViewer::addTFileToTree: Could not open " << file_path;
+        return;
+    }
+
     QStandardItem* parent_item = new QStandardItem(file_path);
 
     for (auto i : *(f->GetListOfKeys())) {

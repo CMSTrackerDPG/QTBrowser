@@ -13,7 +13,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-CONFIG += console
+CONFIG += console c++14
 
 SOURCES += \
     src/dqmfiledownloader.cpp \
@@ -24,6 +24,7 @@ SOURCES += \
     src/models/remotefilesmodel.cpp   \
     src/plugins/concatinateplugin.cpp \
     src/plugins/fitplugin.cpp         \
+    src/plugins/previewplugin.cpp     \
     src/plugins/superimposeplugin.cpp \
     src/settings/settingsdialog.cpp   \
     src/settings/settingsmanager.cpp  \
@@ -41,6 +42,7 @@ HEADERS  += \
     include/plugins/concatinateplugin.h  \
     include/plugins/fitplugin.h          \
     include/plugins/iplugin.h            \
+    include/plugins/previewplugin.h      \
     include/plugins/superimposeplugin.h  \
     include/settings/settingsdialog.h  \
     include/settings/settingsmanager.h \
@@ -53,6 +55,7 @@ FORMS    += \
     form/qtbrowser.ui          \
     form/settingsdialog.ui     \
     form/superimposeplugin.ui  \
+    form/previewplugin.ui      \
     form/tfiletreeviewer.ui    \
     form/fitplugin.ui          \
 

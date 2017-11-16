@@ -24,6 +24,7 @@ public:
     explicit QTBrowser(QWidget *parent = 0);
     ~QTBrowser();
 
+
 public slots:
     void on_finishedDownloadFile(QString file_path);
 
@@ -31,18 +32,19 @@ private slots:
     void on_actionSettings_triggered();
     void on_actionSuperimpose_triggered();
     void on_actionConcatinate_triggered();
-
     void on_actionFit_triggered();
 
+    void on_actionPreview_triggered();
+
 private:
-    void addPlugin(QString name);
-    void removeActivePlugin();
+    void runROOTApp();
+    void setup_plugin();
 
     Ui::QTBrowser *ui;
     TApplication* rootapp = nullptr;
     DQMFileDownloader* filedownloader;
     TFileTreeViewer* filebrowser_tree;
-    QWidget* active_plugin;
+    std::unique_ptr<QWidget> active_plugin = nullptr;
 };
 
 #endif // QTBROWSER_H

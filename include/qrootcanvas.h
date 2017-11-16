@@ -32,7 +32,6 @@ public:
     void fit(TH1* plot, std::string options);
     void fit(TH1* plot, std::string options, double xmin, double xmax);
 
-
 public slots:
     void handle_root_events();
 

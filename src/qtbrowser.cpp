@@ -15,9 +15,11 @@
 #include "container/tobjectcontainer.h"
 #include "settings/settingsmanager.h"
 #include "settings/settingsdialog.h"
+
 #include "plugins/superimposeplugin.h"
 #include "plugins/concatinateplugin.h"
 #include "plugins/fitplugin.h"
+#include "plugins/previewplugin.h"
 
 QTBrowser::QTBrowser(QWidget *parent) :
     QMainWindow(parent),
@@ -61,49 +63,43 @@ void QTBrowser::on_actionSettings_triggered()
     settings_dialog->show();
 }
 
-void QTBrowser::addPlugin(QString name)
+void QTBrowser::setup_plugin()
 {
+    ui->splitter->addWidget(active_plugin.get());
+    connect(filebrowser_tree, SIGNAL(sendTObjectContainer(TObjectContainer&)),
+            active_plugin.get(), SLOT(receiveTObjectContainer(TObjectContainer&)));
+}
+
+void QTBrowser::runROOTApp() {
     if(rootapp == nullptr) {
         rootapp = new TApplication("ROOT Application", 0, 0);
     }
-
-    removeActivePlugin();
-
-    //TODO: dont pass name, pass plugin
-    if(name.compare("Superimpose") == 0)
-        active_plugin = new SuperimposePlugin();
-    if(name.compare("Concatinate") == 0)
-        active_plugin = new ConcatinatePlugin();
-    if(name.compare("Fit") == 0)
-        active_plugin = new FitPlugin();
-
-    ui->splitter->addWidget(active_plugin);
-    connect(filebrowser_tree, SIGNAL(sendTObjectContainer(TObjectContainer&)),
-            active_plugin,    SLOT(receiveTObjectContainer(TObjectContainer&)));
 }
-
-void QTBrowser::removeActivePlugin()
-{
-    if(active_plugin != nullptr) {
-        disconnect(filebrowser_tree, SIGNAL(sendTObjectContainer(TObjectContainer&)),
-                   active_plugin,    SLOT(receiveTObjectContainer(TObjectContainer&)));
-
-        delete active_plugin;
-    }
-}
-
 
 void QTBrowser::on_actionSuperimpose_triggered()
 {
-    addPlugin("Superimpose");
+    runROOTApp();
+    active_plugin.reset(new SuperimposePlugin());
+    setup_plugin();
 }
 
 void QTBrowser::on_actionConcatinate_triggered()
 {
-    addPlugin("Concatinate");
+    runROOTApp();
+    active_plugin.reset(new ConcatinatePlugin());
+    setup_plugin();
 }
 
 void QTBrowser::on_actionFit_triggered()
 {
-    addPlugin("Fit");
+    runROOTApp();
+    active_plugin.reset(new FitPlugin());
+    setup_plugin();
+}
+
+void QTBrowser::on_actionPreview_triggered()
+{
+    runROOTApp();
+    active_plugin.reset(new PreviewPlugin());
+    setup_plugin();
 }

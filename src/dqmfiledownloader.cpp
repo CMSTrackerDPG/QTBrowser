@@ -22,6 +22,8 @@ DQMFileDownloader::DQMFileDownloader(QWidget *parent) :
     current_model = online_model.get();
 
     proxy_model = std::make_unique<QSortFilterProxyModel>(new QSortFilterProxyModel(this));
+    proxy_model->setSourceModel(current_model);
+
     ui->listView->setModel(proxy_model.get());
     ui->listView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 }
@@ -67,7 +69,7 @@ void DQMFileDownloader::setupCertificates()
 bool DQMFileDownloader::isValidSettings()
 {
     setupCertificates();
-    //todo: this is a random file. Replace this with a CURL query with the certificate/key set to
+    //TODO: this is a random file. Replace this with a CURL query with the certificate/key set to
     //      check if the settings are really valid
     TFile* f = TFile::Open("https://cmsweb.cern.ch/dqm/online/data/browse/Original/00030xxxx/0003060xx/DQM_V0001_TrackingHLTBeamspotStream_R000306029.root");
     if(!f) {
@@ -87,10 +89,7 @@ void DQMFileDownloader::on_lineEdit_returnPressed()
 // DOWNLOAD ONLY
 void DQMFileDownloader::on_pushButton_clicked()
 {
-    //todo: extract function
     if(!isValidSettings()) return;
-
-
     setupCertificates();
 
     auto& sm = SettingsManager::getInstance();

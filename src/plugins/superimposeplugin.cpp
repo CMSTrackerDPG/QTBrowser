@@ -29,6 +29,7 @@ void SuperimposePlugin::receiveTObjectContainer(TObjectContainer& container)
     TObject* obj = container.getObject();
     bool is_directory = (obj->IsA() == TDirectoryFile::Class());
 
+    //TODO: Use unique_ptr
     if(!is_directory) {
         TObjectContainer* object = new TObjectContainer(obj, container.getParentFileName());
         QListWidgetItem* item = new QListWidgetItem(obj->GetTitle(), ui->listWidget);

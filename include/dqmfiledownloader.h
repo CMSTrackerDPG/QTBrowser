@@ -1,11 +1,12 @@
 #ifndef DQMFILEDOWNLOADER_H
 #define DQMFILEDOWNLOADER_H
 
+#include <memory>
+
 #include <QMainWindow>
 #include <QSortFilterProxyModel>
 
 #include "models/remotefilesmodel.h"
-#include <memory>
 
 namespace Ui {
 class DQMFileDownloader;
