@@ -17,14 +17,12 @@ DQMFileDownloader::DQMFileDownloader(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ONLINE_remote_files_model = new RemoteFilesModel(this);
-    ONLINE_remote_files_model->fillModelFromFile("data/online.txt");
-    current_model = ONLINE_remote_files_model;
+    online_model = std::make_unique<RemoteFilesModel>(new RemoteFilesModel(this));
+    online_model->fillModelFromFile("data/online.txt");
+    current_model = online_model.get();
 
-    proxy_remote_files_model = new QSortFilterProxyModel(this);
-    proxy_remote_files_model->setSourceModel(current_model);
-
-    ui->listView->setModel(proxy_remote_files_model);
+    proxy_model = std::make_unique<QSortFilterProxyModel>(new QSortFilterProxyModel(this));
+    ui->listView->setModel(proxy_model.get());
     ui->listView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 }
 
@@ -83,7 +81,7 @@ bool DQMFileDownloader::isValidSettings()
 void DQMFileDownloader::on_lineEdit_returnPressed()
 {
     QString filter = ui->lineEdit->text();
-    proxy_remote_files_model->setFilterRegExp(filter);
+    proxy_model->setFilterRegExp(filter);
 }
 
 // DOWNLOAD ONLY
@@ -104,7 +102,7 @@ void DQMFileDownloader::on_pushButton_clicked()
 
     for(auto& e : ui->listView->selectionModel()->selectedIndexes()){
 
-        auto real_idx = proxy_remote_files_model->mapToSource(e);
+        auto real_idx = proxy_model->mapToSource(e);
         QString name = current_model->data(real_idx, Qt::DisplayRole).toString();
         QString url  = current_model->getFilepath(real_idx);
         qDebug() << 3;
@@ -131,7 +129,7 @@ void DQMFileDownloader::on_pushButton_2_clicked()
 
     for(auto& e : ui->listView->selectionModel()->selectedIndexes()){
 
-        auto real_idx = proxy_remote_files_model->mapToSource(e);
+        auto real_idx = proxy_model->mapToSource(e);
         QString name = current_model->data(real_idx, Qt::DisplayRole).toString();
         QString url  = current_model->getFilepath(real_idx);
         QString download_path =  download_base_path + "/" + name;
@@ -146,31 +144,31 @@ void DQMFileDownloader::on_pushButton_2_clicked()
 void DQMFileDownloader::on_comboBox_currentIndexChanged(const QString& dropdowntext)
 {
     if(dropdowntext == "Online") {
-        if(!ONLINE_remote_files_model) {
-            ONLINE_remote_files_model = new RemoteFilesModel(this);
-            ONLINE_remote_files_model->fillModelFromFile("data/online.txt");
+        if(!online_model) {
+            online_model = std::make_unique<RemoteFilesModel>(new RemoteFilesModel(this));
+            online_model->fillModelFromFile("data/online.txt");
         }
-        current_model = ONLINE_remote_files_model;
+        current_model = online_model.get();
 
     } else if(dropdowntext == "Offline") {
-        if(!OFFLINE_remote_files_model) {
-            OFFLINE_remote_files_model = new RemoteFilesModel(this);
-            OFFLINE_remote_files_model->fillModelFromFile("data/offline.txt");
+        if(!offline_model) {
+            offline_model = std::make_unique<RemoteFilesModel>(new RemoteFilesModel(this));
+            offline_model->fillModelFromFile("data/offline.txt");
         }
-        current_model = OFFLINE_remote_files_model;
+        current_model = offline_model.get();
 
     } else if(dropdowntext == "Relval") {
-        if(!RELVAL_remote_files_model) {
-            RELVAL_remote_files_model = new RemoteFilesModel(this);
-            RELVAL_remote_files_model->fillModelFromFile("data/relval.txt");
+        if(!relval_model) {
+            relval_model = std::make_unique<RemoteFilesModel>(new RemoteFilesModel(this));
+            relval_model->fillModelFromFile("data/relval.txt");
         }
-        current_model = RELVAL_remote_files_model;
+        current_model = relval_model.get();
     } else {
         qDebug() << "[BUG] DQMFileDownloader::on_comboBox_currentIndexChanged This should not happen";
     }
 
-    proxy_remote_files_model->setSourceModel(current_model);
-    ui->listView->setModel(proxy_remote_files_model);
+    proxy_model->setSourceModel(current_model);
+    ui->listView->setModel(proxy_model.get());
     ui->listView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 }
 

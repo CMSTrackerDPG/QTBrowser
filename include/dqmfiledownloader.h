@@ -5,6 +5,7 @@
 #include <QSortFilterProxyModel>
 
 #include "models/remotefilesmodel.h"
+#include <memory>
 
 namespace Ui {
 class DQMFileDownloader;
@@ -35,12 +36,12 @@ private:
     bool isValidSettings();
 
     Ui::DQMFileDownloader *ui;
-    RemoteFilesModel      *ONLINE_remote_files_model  = nullptr;
-    RemoteFilesModel      *OFFLINE_remote_files_model = nullptr;
-    RemoteFilesModel      *RELVAL_remote_files_model  = nullptr;
-    RemoteFilesModel      *current_model              = nullptr;
 
-    QSortFilterProxyModel *proxy_remote_files_model;
+    RemoteFilesModel* current_model;
+    std::unique_ptr<RemoteFilesModel> online_model  {nullptr};
+    std::unique_ptr<RemoteFilesModel> offline_model {nullptr};
+    std::unique_ptr<RemoteFilesModel> relval_model  {nullptr};
+    std::unique_ptr<QSortFilterProxyModel> proxy_model {nullptr};
 };
 
 #endif // DQMFILEDOWNLOADER_H
