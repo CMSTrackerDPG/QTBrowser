@@ -77,8 +77,9 @@
     <property name="title">
      <string>Pl&amp;ugins</string>
     </property>
-    <addaction name="actionSuperimpose"/>
     <addaction name="actionConcatinate"/>
+    <addaction name="actionFit"/>
+    <addaction name="actionSuperimpose"/>
     <addaction name="separator"/>
     <addaction name="actionAbout_Plugins"/>
    </widget>
@@ -133,6 +134,11 @@
    </property>
    <property name="text">
     <string>Update Offline Index</string>
+   </property>
+  </action>
+  <action name="actionFit">
+   <property name="text">
+    <string>Fit</string>
    </property>
   </action>
  </widget>

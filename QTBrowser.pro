@@ -23,6 +23,7 @@ SOURCES += \
     src/tfiletreeviewer.cpp   \
     src/models/remotefilesmodel.cpp   \
     src/plugins/concatinateplugin.cpp \
+    src/plugins/fitplugin.cpp         \
     src/plugins/superimposeplugin.cpp \
     src/settings/settingsdialog.cpp   \
     src/settings/settingsmanager.cpp  \
@@ -38,6 +39,7 @@ HEADERS  += \
     include/models/leafsortfilterproxymodel.h \
     include/models/remotefilesmodel.h         \
     include/plugins/concatinateplugin.h  \
+    include/plugins/fitplugin.h          \
     include/plugins/iplugin.h            \
     include/plugins/superimposeplugin.h  \
     include/settings/settingsdialog.h  \
@@ -52,6 +54,7 @@ FORMS    += \
     form/settingsdialog.ui     \
     form/superimposeplugin.ui  \
     form/tfiletreeviewer.ui    \
+    form/fitplugin.ui          \
 
 INCLUDEPATH += $$PWD/include
 

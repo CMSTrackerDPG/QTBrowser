@@ -32,6 +32,8 @@ TFileTreeViewer::TFileTreeViewer(QWidget *parent) :
     proxy_model->setSourceModel(model);
 
     ui->treeView->setModel(proxy_model);
+
+    this->addTFileToTree("/home/fil/projects/dqmPlotter/f1.root");
 }
 
 TFileTreeViewer::~TFileTreeViewer()

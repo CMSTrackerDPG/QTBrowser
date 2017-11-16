@@ -65,7 +65,7 @@ void QRootCanvas::clear()
 }
 
 
-void QRootCanvas::superimpose(std::vector<TH1*> plots, std::string title, bool is_multiaxis)
+void QRootCanvas::superimpose(std::vector<TH1*>& plots, std::string title, bool is_multiaxis)
 {
     if(is_multiaxis)
         superimpose_with_multiaxis(plots, title);
@@ -73,7 +73,7 @@ void QRootCanvas::superimpose(std::vector<TH1*> plots, std::string title, bool i
         superimpose_without_multiaxis(plots, title);
 }
 
-void QRootCanvas::superimpose_without_multiaxis(std::vector<TH1*> plots, std::string title)
+void QRootCanvas::superimpose_without_multiaxis(std::vector<TH1*>& plots, std::string title)
 {
     canvas->cd();
     canvas->Clear();
@@ -103,7 +103,7 @@ void QRootCanvas::superimpose_without_multiaxis(std::vector<TH1*> plots, std::st
     canvas->Update();
 }
 
-void QRootCanvas::superimpose_with_multiaxis(std::vector<TH1*> plots, std::string title)
+void QRootCanvas::superimpose_with_multiaxis(std::vector<TH1*>& plots, std::string title)
 {
     canvas->cd();
 
@@ -193,7 +193,7 @@ void QRootCanvas::superimpose_with_multiaxis(std::vector<TH1*> plots, std::strin
     }
 }
 
-void QRootCanvas::concatinatePlots(std::vector<TH1*> plots, std::string title)
+void QRootCanvas::concatinatePlots(std::vector<TH1*>& plots, std::string title)
 {
     int total_bins = 0;
     int total_range = 0;
@@ -215,6 +215,18 @@ void QRootCanvas::concatinatePlots(std::vector<TH1*> plots, std::string title)
     }
     canvas->cd();
     merged.Clone()->Draw();
+}
+
+void QRootCanvas::fit(TH1* plot, std::string options)
+{
+    canvas->Clear();
+    plot->Fit(options.c_str());
+}
+
+void QRootCanvas::fit(TH1* plot, std::string options, double xmin, double xmax)
+{
+    canvas->Clear();
+    plot->Fit(options.c_str(), "", "", xmin, xmax);
 }
 
 void QRootCanvas::saveAs(std::string filename)

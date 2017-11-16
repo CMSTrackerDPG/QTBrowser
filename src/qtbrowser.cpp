@@ -17,6 +17,7 @@
 #include "settings/settingsdialog.h"
 #include "plugins/superimposeplugin.h"
 #include "plugins/concatinateplugin.h"
+#include "plugins/fitplugin.h"
 
 QTBrowser::QTBrowser(QWidget *parent) :
     QMainWindow(parent),
@@ -68,10 +69,13 @@ void QTBrowser::addPlugin(QString name)
 
     removeActivePlugin();
 
+    //TODO: dont pass name, pass plugin
     if(name.compare("Superimpose") == 0)
         active_plugin = new SuperimposePlugin();
     if(name.compare("Concatinate") == 0)
         active_plugin = new ConcatinatePlugin();
+    if(name.compare("Fit") == 0)
+        active_plugin = new FitPlugin();
 
     ui->splitter->addWidget(active_plugin);
     connect(filebrowser_tree, SIGNAL(sendTObjectContainer(TObjectContainer&)),
@@ -97,4 +101,9 @@ void QTBrowser::on_actionSuperimpose_triggered()
 void QTBrowser::on_actionConcatinate_triggered()
 {
     addPlugin("Concatinate");
+}
+
+void QTBrowser::on_actionFit_triggered()
+{
+    addPlugin("Fit");
 }
