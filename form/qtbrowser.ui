@@ -75,7 +75,7 @@
    </widget>
    <widget class="QMenu" name="menuPlugins">
     <property name="title">
-     <string>Pl&amp;ugins</string>
+     <string>Mode</string>
     </property>
     <addaction name="actionConcatinate"/>
     <addaction name="actionFit"/>
