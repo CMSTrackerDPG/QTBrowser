@@ -72,6 +72,11 @@ LIBS += -L/cvmfs/cms.cern.ch/slc6_amd64_gcc630/lcg/root/6.10.08/lib -lGui -lCore
          -lm -ldl
 } else {
 #  ------------------------- LOCALLY -------------------------
+# it depends if you need also a 
+# INCLUDEPATH += ...
+# on your distribution, and the way you chose to  install ROOT
+
+#            vvvvvvvvvvvvvv This might also vary....
 LIBS     += -L/usr/local/lib -lGui -lCore -lImt -lRIO -lNet \
             -lHist -lGraf -lGraf3d -lGpad -lTree -lTreePlayer \
             -lRint -lPostscript -lMatrix -lPhysics \
