@@ -29,6 +29,11 @@ QTBrowser::QTBrowser(QWidget *parent) :
     filedownloader   = ui->widget_2;
     filebrowser_tree = ui->widget_3;
 
+    // This is a dirty workaround for ROOTs Cling having problems with exposed LLVM symobols
+    // https://root-forum.ch/t/error-llvm-symbols-exposed-to-cling/23597
+    gROOT->GetInterpreter();
+    // another option is to build with   gcc-3.5 < gcc-X < gcc-4.9
+
     // When a download finishes, qtbrowser catches the signal
     // switches the tab to the treeview, and tells the treeview
     // to load the downloaded file in its view
